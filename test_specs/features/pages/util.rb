@@ -1,7 +1,7 @@
 class Util < SitePrism::Page
 
-  element :datepickercurrentyear_label1, :xpath, ".//*[@id='ui-datepicker-div']/div[1]/div/div/span[2]"
-  element :datepickercurrentyear_label2, :xpath, ".//*[@id='ui-datepicker-div']/div[2]/div/div/span[2]"
+  element :datepickercurrentyear_label1, :xpath, ".//*[@id='ui-datepicker-div']/div[1]/div/div/span[@class='ui-datepicker-year']"
+  element :datepickercurrentyear_label2, :xpath, ".//*[@id='ui-datepicker-div']/div[2]/div/div/span[@class='ui-datepicker-year']"
   element :datepickercurrentmonth_label1, :xpath, ".//*[@id='ui-datepicker-div']/div[1]/div/div/span[1]"
   element :datepickercurrentmonth_label2, :xpath, ".//*[@id='ui-datepicker-div']/div[2]/div/div/span[1]"
   element :datepickernext_button, :xpath, ".//*[@id='ui-datepicker-div']//a[@title='Next']"
@@ -72,11 +72,11 @@ class Util < SitePrism::Page
       when 'Class Type' then
         fail(ArgumentError.new('Class type does not match original search')) if has_no_xpath?(".//*[@id='summary-form']/div/div/div/div/ol/a/span[text()='#{input}']")
       when 'Departure Airport' then
-        fail(ArgumentError.new('Departure airport does not match original search')) if has_no_xpath?(".//*[@id='departure']/div[1]/div[1]/div[contains(text(),'#{input}')]")
+        fail(ArgumentError.new('Departure airport does not match original search')) if has_no_xpath?(".//*[@id='flight_search_flight_search_slices_attributes_0_departure_search_for'][contains(@value, '#{input}')]")
       when 'Arrival Airport' then
-        fail(ArgumentError.new('Departure airport does not match original search')) if has_no_xpath?(".//*[@id='departure']/div[2]/div[1]/div[contains(text(), '#{input}')]")
+        fail(ArgumentError.new('Departure airport does not match original search')) if has_no_xpath?(".//*[@id='flight_search_flight_search_slices_attributes_0_arrival_search_for'][contains(@value, '#{input}')]")
       when 'Airport 1 From' then
-        fail(ArgumentError.new('First departure airport does not match original search')) if has_no_xpath?(".//*[@class='SummaryMulti-flightOrigin'][contains(text(), '#{input}')]") #CHANGE THE REST TO NOT USE NUMBERS#
+        fail(ArgumentError.new('First departure airport does not match original search')) if has_no_xpath?(".//*[@class='SummaryMulti-flightOrigin'][contains(text(), '#{input}')]")
       when 'Airport 1 To' then
         fail(ArgumentError.new('First arrival airport does not match original search')) if has_no_xpath?(".//*[@id='_iz']/div/div/div/div/table/tbody/tr[1]/td/span[3][contains(text(), '#{input}')]")
       when 'Airport 2 From' then

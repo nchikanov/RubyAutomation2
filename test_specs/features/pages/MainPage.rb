@@ -42,8 +42,13 @@ class MainPage < SitePrism::Page
   element :ret_date, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_1_departure_date']"
   element :ret_time, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_1_departure_hour_range_input']/a"
   element :nonstop, :xpath, ".//*[@id='flight_search_nonstop_only_input']/label/span"
-  element :search_flights, :xpath, ".//*[@id='new_flight_search']/fieldset[13]/ol/li[1]/input"
+  element :search_flights, :xpath, ".//*[@id='new_flight_search']/fieldset/ol/li/input[@value='Search Flights']"
   element :when_go, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_0_departure_hour_range_input']/a/span[1]"
+  element :flexible_3days, :xpath, ".//*[@id='flight_search_flex_search_input']/label/span"
+
+  #AmexTravel Car
+  element :pick_up_car, :xpath, ".//*[@id='car_search_start_date']"
+  element :drop_off_car, :xpath, ".//*[@id='car_search_end_date']"
 
   # region Date Picker - used for AmexTravel Flight
   element :datepickercurrentyear_label, :xpath, ".//*[@id='ui-datepicker-div']//span[@class='ui-datepicker-year']"
@@ -2161,6 +2166,16 @@ class MainPage < SitePrism::Page
         nonstop.click
       when 'search flights' then
         search_flights.click
+      when 'Show me +/- 3 days' then
+        flexible_3days.click
+      when 'United Airlines' then
+        find(:xpath, ".//*[@id='selectable']/thead/tr/th/a/span[text()='#{button}']").click
+
+        #AmexTravel Car
+      when 'pick-up' then
+        pick_up_car.click
+      when 'drop-off' then
+        drop_off_car.click
 
       when 'Change Password Submit' then
         submitchangepassword_button.click

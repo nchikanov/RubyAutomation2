@@ -1437,6 +1437,18 @@ end
 
 Then(/^I verify the "([^"]*)" page is displayed$/) do |page|
   case page
+    when 'Review Your Trip' then
+      displayed = has_xpath? ".//*[@class='tittle-summary']/h1[contains(text(),'Review Your Trip')]"
+      fail(ArgumentError.new('The Review Your Trip page is not displayed!')) unless displayed
+
+    when 'Flex' then
+      displayed = has_xpath? ".//*[@id='_iz']/div/div/div[@class='flex-matrix']"
+      fail(ArgumentError.new('The flex matrix is not displayed!')) unless displayed
+
+    when 'Interstitial' then
+      displayed = has_xpath? ".//*[@id='_iz']/div/div/div/img[@class='loading-spin']"
+      displayed2 = has_xpath? ".//*[@id='_iz']/div/div/div/div[@class='loading-waitingText'][contains(text(), 'One moment please...')]"
+      fail(ArgumentError.new('The Intersitial page is not displayed!')) unless displayed && displayed2
 
     when 'puppies' then
       displayed = has_xpath? ".//*[contains(@href,'puppies') and text()='Images for puppies']"
@@ -1734,23 +1746,33 @@ Then(/^I select "([^"]*)" option from the "([^"]*)" dropdown menu$/) do |string,
     when 'fare class' then
       find(:xpath, ".//*[@id='flight_search_cabin_type_input']/a").click
       @bookflightspage.selectItemInAutosuggest(field, string)
+    when 'car rental company' then
+      find(:xpath, ".//*[@id='car_search_vendor_code_filters_input']/a/span[text()='No Preference']").click
+      @bookcarspage.selectItemInAutosuggest(field, string)
   end
 
 
 end
 
 And(/^I select a date from the datepicker on the "([^"]*)" section$/) do |date|
-  if date == 'dep'
-      @mainpage.clickButton('departure date')
-      datetopick = Date.today+7
-  elsif date == 'ret'
-    @mainpage.clickButton('return date')
-      datetopick = Date.today+30
-  else
-      datetopick = Date.today
-  end
-  @util.selectDateFromDatePicker(datetopick.strftime('%m/%d/%Y'))
-  sleep 1
+ case date
+   when 'dep' then
+     @mainpage.clickButton('departure date')
+     datetopick = Date.today+90
+   when 'ret' then
+     @mainpage.clickButton('return date')
+     datetopick = Date.today+97
+   when 'pick-up' then
+     @mainpage.clickButton('pick-up')
+     datetopick = Date.today+90
+   when 'drop-off' then
+     @mainpage.clickButton('drop-off')
+     datetopick = Date.today+97
+   else
+     datetopick = Date.today
+ end
+ @util.selectDateFromDatePicker(datetopick.strftime('%m/%d/%Y'))
+ sleep 1
 end
 
 
@@ -1769,4 +1791,28 @@ When(/^I click on the "([^"]*)" button with "([^"]*)", "([^"]*)", and "([^"]*)"$
     find(:xpath, ".//*[@id='flight_search_traveler_groups_child_count_input']/a").click
     find(:xpath, "html/body/ul[9]/li/a[text()='#{children.to_i}']").click
   end
+end
+
+And(/^I click on the "([^"]*)" button on "([^"]*)" page$/) do |button, page|
+  case page
+    when 'AmexFlight Booking' then
+      case button
+        when 'Search' then
+          find(:xpath, ".//*[@id='new_flight_search']/fieldset/ol/li/input[@value='Search Flights']").click
+      end
+    when 'Flex' then
+      case button
+        when 'Select on the first Airline flight card' then
+            @bookflightspage.selectfirstbutton
+      end
+    when 'AmexCars Booking' then
+      case button
+        when 'Search Cars' then
+          find(:xpath, ".//*[@id='new_car_search']/fieldset/ol/li/input[@value='Search Cars']").click
+      end
+    else
+      fail(ArgumentError.new('THIS STEP AINT WORKING'))
+  end
+
+  sleep 5
 end

@@ -21,6 +21,10 @@ class BookFlightsPage < SitePrism::Page
  element :childinlap_option, :xpath, ".//*[@id='flight_search_traveler_groups_infants_seated_input']/fieldset/ol/li[1]/span"
  element :childinseat_option, :xpath, ".//*[@id='flight_search_traveler_groups_infants_seated_input']/fieldset/ol/li[2]/span"
 
+ element :pick_up_time, :xpath, ".//*[@id='car_search_start_time_input']/a"
+ element :drop_off_time, :xpath, ".//*[@id='car_search_end_time_input']/a"
+ element :air_conditioning, :xpath,  ".//*[@id='car_search_air_conditioning_input']/a"
+ element :transmission_button, :xpath, ".//*[@id='car_search_transmission_type_input']/a"
   def selectRadioButton(option)
     case option
       ###Flight Type###
@@ -160,11 +164,42 @@ class BookFlightsPage < SitePrism::Page
           end
         end
 
+      when 'Car Rental Time' then
+        pick_up_time.click
+        find(:xpath, "html/body/ul[5]/li/a[text()='#{value1}']").click
+
+        drop_off_time.click
+        find(:xpath, "html/body/ul[6]/li/a[text()='#{value2}']").click
+
+      when 'Do you have any specific preferences' then
+        air_conditioning.click
+        find(:xpath, "html/body/ul[8]/li/a[text()='#{value1}']").click
+
+        transmission_button.click
+        find(:xpath, "html/body/ul[9]/li/a[text()='#{value2}']").click
+
+
       else
         fail(ArgumentError.new("'#{value1}' does not exist!"))
 
     end
 
+  end
+
+  def selectlowestprice
+    if has_xpath? ".//*[@class='flex-matrix-grid']/tbody/tr/td[@class='lowest-price']"
+      find('td', :match => :first).click
+    else
+      puts "Could not select lowest price"
+    end
+  end
+
+  def selectfirstbutton
+    if has_xpath? ".//*[@id='flight_card_container']/li/div/a[text()='Select']"
+      find('a', text: 'Select', :match => :first).click
+    else
+      puts "Could not select first 'SUBMIT' button"
+    end
   end
 
 end

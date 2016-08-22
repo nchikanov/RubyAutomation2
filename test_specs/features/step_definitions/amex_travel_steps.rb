@@ -64,3 +64,12 @@ And(/^I set the "([^"]*)" fields with "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)"
   @util.selectDateFromDatePicker((datepicked+60).strftime('%m/%d/%Y'))
   @bookflightspage.setValue(element3, time3)
 end
+
+
+And(/^I click on the lowest price option in flex matrix$/) do
+  @bookflightspage.selectlowestprice
+end
+
+And(/^I click on "([^"]*)" on the flight Matrix$/) do |airline|
+  @mainpage.clickButton(airline)
+end
