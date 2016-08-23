@@ -10,7 +10,10 @@ Feature: AmexTravel Car Booking
     And I select "<car rental company>" option from the "car rental company" dropdown menu
     And I set the "Do you have any specific preferences" fields with "<air conditioning>" value and "<transmission>" value
     And I click on the "Search Cars" button on "AmexCars Booking" page
-    #Add verifications
+    #Should probably verify the date too but don't know a good way to do this since date is not set?
+    Then I verify car pickup in "<city or airport>" on "<time1>" and dropoff on "<time2>"
+    And I click on the "Select cheapest car" button
+    Then I verify the "Review Your Car Booking" page is displayed
 
 
     Examples:

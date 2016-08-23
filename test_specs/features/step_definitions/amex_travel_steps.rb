@@ -24,12 +24,12 @@ Then(/^I verify that flight info from "([^"]*)" to "([^"]*)" to "([^"]*)" with "
 end
 
 When(/^I set the radio button to "([^"]*)"$/) do |arg|
-  @bookflightspage.selectRadioButton(arg)
+  @util.selectRadioButton(arg)
 end
 
 And(/^I set the radio buttons to "([^"]*)" and "([^"]*)"$/) do |button1, button2|
-  @bookcarspage.selectRadioButton(button1)
-  @bookcarspage.selectRadioButton(button2)
+  @util.selectRadioButton(button1)
+  @util.selectRadioButton(button2)
 
 end
 
@@ -39,7 +39,7 @@ end
 
 
 And(/^I set the "([^"]*)" field with "([^"]*)" value$/) do |element, value|
-  @bookcarspage.setValue(element, value)
+  @util.setValue(element, value)
 end
 
 And(/^I set the "([^"]*)" fields with "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)" and "(.*) values$/) do |element, place1, place2, place3, time1, time2, time3|
@@ -72,4 +72,12 @@ end
 
 And(/^I click on "([^"]*)" on the flight Matrix$/) do |airline|
   @mainpage.clickButton(airline)
+end
+
+Then(/^I verify car pickup in "([^"]*)" on "([^"]*)" and dropoff on "([^"]*)"$/) do |city, time1, time2|
+  @util.verifyElementExists('car pickup city', city)
+  @util.verifyElementExists('car dropoff city', city)
+
+  @util.verifyElementExists('car pickup time', time1)
+  @util.verifyElementExists('car dropoff time', time2)
 end

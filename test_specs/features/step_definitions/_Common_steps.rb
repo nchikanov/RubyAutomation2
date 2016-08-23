@@ -1441,6 +1441,10 @@ Then(/^I verify the "([^"]*)" page is displayed$/) do |page|
       displayed = has_xpath? ".//*[@class='tittle-summary']/h1[contains(text(),'Review Your Trip')]"
       fail(ArgumentError.new('The Review Your Trip page is not displayed!')) unless displayed
 
+    when 'Review Your Car Booking' then
+      displayed = has_xpath? ".//*[@class='banner']/h2[text()='Review Your Car Booking']"
+      fail(ArgumentError.new('The Review Your Car Booking page is not displayed!')) unless displayed
+
     when 'Flex' then
       displayed = has_xpath? ".//*[@id='_iz']/div/div/div[@class='flex-matrix']"
       fail(ArgumentError.new('The flex matrix is not displayed!')) unless displayed

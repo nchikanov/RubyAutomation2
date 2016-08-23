@@ -49,6 +49,7 @@ class MainPage < SitePrism::Page
   #AmexTravel Car
   element :pick_up_car, :xpath, ".//*[@id='car_search_start_date']"
   element :drop_off_car, :xpath, ".//*[@id='car_search_end_date']"
+  element :select_cheap_car, :xpath, ".//*[@id='new_car_0']/fieldset/ol/button"
 
   # region Date Picker - used for AmexTravel Flight
   element :datepickercurrentyear_label, :xpath, ".//*[@id='ui-datepicker-div']//span[@class='ui-datepicker-year']"
@@ -2176,6 +2177,8 @@ class MainPage < SitePrism::Page
         pick_up_car.click
       when 'drop-off' then
         drop_off_car.click
+      when 'Select cheapest car' then
+        select_cheap_car.click
 
       when 'Change Password Submit' then
         submitchangepassword_button.click

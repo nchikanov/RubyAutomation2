@@ -71,6 +71,7 @@ Before do |scenario|
   @util = Util.new
   @bookflightspage = BookFlightsPage.new
   @bookcarspage = BookCarsPage.new
+  @bookhotelspage = BookHotelsPage.new
 end
 
 After do |scenario|

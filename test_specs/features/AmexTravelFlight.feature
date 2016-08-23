@@ -4,8 +4,8 @@ Feature: AmexTravel Flight Booking
     Given I navigate to the external "flights" site
     When I set the radio button to "<type of flight>"
     And I set the "Where are you going" fields with "<starting point>" value and "<ending point>" value
-    #And I select a date from the datepicker on the "dep" section
-    #And I select a date from the datepicker on the "ret" section
+    And I select a date from the datepicker on the "dep" section
+    And I select a date from the datepicker on the "ret" section
     And I set the "When are you going" fields with "<time>" value and "<time2>" value
     And I click on the "Show me +/- 3 days" button
     And I click on the "number of travelers" button with "<seniors>", "<adults>", and "<children>"
@@ -21,7 +21,6 @@ Feature: AmexTravel Flight Booking
     And I click on the "Select on the first Airline flight card" button on "Flex" page
     #PROBLEM...goes straight to checkout when it automates but not when I do it manually
     Then I verify the "Review Your Trip" page is displayed
-    #Then I verify the data on the page ^
 
     #NINA, NOTE: CHANGE XPATHS ON PAGES (!!)
 

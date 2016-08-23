@@ -1,9 +1,6 @@
 
 class BookFlightsPage < SitePrism::Page
 
- element :roundtrip_radiobutton, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[1]/label/span"
- element :oneway_radiobutton, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[2]/label/span"
- element :multicity_radiobutton, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[3]/label/span"
  element :departure_airport, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_0_departure_search_for']"
  element :departure_airport_2, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_1_departure_search_for']"
  element :departure_airport_3, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_2_departure_search_for']"
@@ -25,18 +22,6 @@ class BookFlightsPage < SitePrism::Page
  element :drop_off_time, :xpath, ".//*[@id='car_search_end_time_input']/a"
  element :air_conditioning, :xpath,  ".//*[@id='car_search_air_conditioning_input']/a"
  element :transmission_button, :xpath, ".//*[@id='car_search_transmission_type_input']/a"
-  def selectRadioButton(option)
-    case option
-      ###Flight Type###
-      when 'Round Trip' then
-        roundtrip_radiobutton.click
-      when 'One Way' then
-        oneway_radiobutton.click
-      when 'Multi-City' then
-        multicity_radiobutton.click
-      else "The '#{option}' was not found."
-    end
-  end
 
    def selectItemInAutosuggest(autosuggestName, item)
      case autosuggestName

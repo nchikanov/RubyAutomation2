@@ -7,6 +7,70 @@ class Util < SitePrism::Page
   element :datepickernext_button, :xpath, ".//*[@id='ui-datepicker-div']//a[@title='Next']"
   element :datepickerprevious_button, :xpath, ".//*[@id='ui-datepicker-div']//a[@title='Prev']"
 
+  #AmexTravel Car Booking
+  element :same_dropoff_radiobutton, :xpath, ".//*[@id='car_search_rental_type_input']/fieldset/ol/li[1]/label/span"
+  element :diff_dropoff_radiobutton, :xpath, ".//*[@id='car_search_rental_type_input']/fieldset/ol/li[2]/label/span"
+  element :search_city_airport_radiobutton, :xpath, ".//*[@id='car_search_pickup_use_address_input']/fieldset/ol/li[1]/label/span"
+  element :search_address_radiobutton, :xpath, ".//*[@id='car_search_pickup_use_address_input']/fieldset/ol/li[2]/label/span"
+  element :car_pickup, :xpath, ".//*[@id='pick_up']"
+
+  #AmexTravel Flight Booking
+  element :roundtrip_radiobutton, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[1]/label/span"
+  element :oneway_radiobutton, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[2]/label/span"
+  element :multicity_radiobutton, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[3]/label/span"
+
+  #AmexTravel Hotel Booking
+  element :city_landmark_search, :xpath, ".//*[@id='new_hotel_search']/fieldset[1]/ol/div/span[1]"
+  element :address_search, :xpath, ".//*[@id='new_hotel_search']/fieldset/ol/div/span[2]"
+  element :where_going_search_bar, :xpath, ".//*[@id='hotel_search_location_name']"
+
+
+
+  def setValue(element, value)
+    case element
+      when 'Where will you pick up the car' then
+        car_pickup.click
+        car_pickup.set value
+        @bookcarspage.selectItemInAutosuggest('car pickup', value)
+      when 'Where are you going - Hotel' then
+        where_going_search_bar.click
+        where_going_search_bar.set value
+        @bookhotelspage.selectItemInAutosuggest('hotel city', value)
+      else
+        puts "#{value} was not properly set in field"
+    end
+    end
+
+    def selectRadioButton(option)
+    case option
+      ###AmexTravelCar.feature###
+      when 'Drop-off location same as pick-up' then
+        same_dropoff_radiobutton.click
+      when 'Different drop-off location' then
+        diff_dropoff_radiobutton.click
+      when 'Search by city or airport' then
+        search_city_airport_radiobutton.click
+      when 'Search by address' then
+        search_address_radiobutton.click
+
+        ###AmexTravelFlight.feature###
+      when 'Round Trip' then
+        roundtrip_radiobutton.click
+      when 'One Way' then
+        oneway_radiobutton.click
+      when 'Multi-City' then
+        multicity_radiobutton.click
+
+        ###AmexTravelHotel.feature###
+      when 'Search by city or landmark' then
+        city_landmark_search.click
+      when 'Search by address' then
+        address_search.click
+
+      else "The '#{option}' was not found."
+    end
+  end
+
   # Generic that returns whether a mail has a given content or not
   # content: regular expression
   # unread: boolean to mark mail as unread or not
@@ -92,8 +156,18 @@ class Util < SitePrism::Page
       when 'Multi Total Passengers' then
         fail(ArgumentError.new('Passenger total does not match original search')) if has_no_xpath?(".//*[@id='_iz']/div/div/div/div/div/span[2][contains(text(), '#{input}')]")
 
+        #Cars
+      when 'car pickup city' then
+        fail(ArgumentError.new('Car pickup city does not match original search')) if has_no_xpath?(".//*[@id='car_search_pickup_location'][@value='#{input}']")
+      when 'car dropoff city' then
+        fail(ArgumentError.new('Car dropoff city does not match original search')) if has_no_xpath?(".//*[@id='car_search_dropoff_location'][@value='#{input}']")
+      when 'car pickup time' then
+        fail(ArgumentError.new('Car pickup time does not match original search')) if has_no_xpath?(".//*[@id='car_search_start_time_input']/a/span[text()='#{input}']")
+      when 'car dropoff time' then
+        fail(ArgumentError.new('Car dropoff time does not match original search')) if has_no_xpath?(".//*[@id='car_search_end_time_input']/a/span[text()='#{input}']")
     end
   end
 
 
 end
+

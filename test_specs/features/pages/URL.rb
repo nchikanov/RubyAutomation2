@@ -10,6 +10,7 @@ class URL
   @@url['linkedin']['url'] = "https://www.linkedin.com/"
   @@url['flights']['url'] = "https://www.amextravel.com/flight_searches/new"
   @@url['cars']['url'] = "https://www.amextravel.com/car_searches/new"
+  @@url['hotel search']['url'] = "https://www.amextravel.com/hotel_searches/new"
 
   def getUrl(website)
     @@url[website]['url']
