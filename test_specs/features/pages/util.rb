@@ -32,10 +32,9 @@ class Util < SitePrism::Page
         car_pickup.click
         car_pickup.set value
         @bookcarspage.selectItemInAutosuggest('car pickup', value)
-      when 'Where are you going - Hotel' then
+      when 'Where are you going Hotel' then
         where_going_search_bar.click
         where_going_search_bar.set value
-        @bookhotelspage.selectItemInAutosuggest('hotel city', value)
       else
         puts "#{value} was not properly set in field"
     end

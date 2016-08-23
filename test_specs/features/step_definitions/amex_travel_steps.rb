@@ -40,6 +40,7 @@ end
 
 And(/^I set the "([^"]*)" field with "([^"]*)" value$/) do |element, value|
   @util.setValue(element, value)
+  @bookhotelspage.selectItemInAutosuggest('hotel city', value)
 end
 
 And(/^I set the "([^"]*)" fields with "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)" and "(.*) values$/) do |element, place1, place2, place3, time1, time2, time3|
