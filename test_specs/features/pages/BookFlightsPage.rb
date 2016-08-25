@@ -45,6 +45,7 @@ class BookFlightsPage < SitePrism::Page
      when 'When are you going' then
        departure_time.click
        selectItemInAutosuggest('dept time', value)
+
      when 'Where and when are you going' then
        departure_time.click
 
@@ -172,8 +173,9 @@ class BookFlightsPage < SitePrism::Page
   end
 
   def selectlowestprice
-    if has_xpath? ".//*[@class='flex-matrix-grid']/tbody/tr/td[@class='lowest-price']"
-      find('td', :match => :first).click
+    if has_xpath? ".//*[@class='lowest-price']/a"
+      #find('a', :match => :first).click
+      first('.lowest-price > a').click
     else
       puts "Could not select lowest price"
     end

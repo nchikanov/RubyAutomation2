@@ -1454,6 +1454,10 @@ Then(/^I verify the "([^"]*)" page is displayed$/) do |page|
       displayed2 = has_xpath? ".//*[@id='_iz']/div/div/div/div[@class='loading-waitingText'][contains(text(), 'One moment please...')]"
       fail(ArgumentError.new('The Intersitial page is not displayed!')) unless displayed && displayed2
 
+    when 'Hotel Rooms & Rates' then
+      displayed = has_xpath?".//*[@class='rooms ui-state-default ui-corner-top ui-tabs-selected ui-state-active']/a[text()='Rooms & Rates']"
+      fail(ArgumentError.new('The Hotel Rooms & Rates page is not displayed!')) unless displayed
+
     when 'puppies' then
       displayed = has_xpath? ".//*[contains(@href,'puppies') and text()='Images for puppies']"
       fail(ArgumentError.new('The result of puppies is not displayed!')) unless displayed
@@ -1772,11 +1776,18 @@ And(/^I select a date from the datepicker on the "([^"]*)" section$/) do |date|
    when 'drop-off' then
      @mainpage.clickButton('drop-off')
      datetopick = Date.today+97
+   when 'check-in date' then
+     @mainpage.clickButton('check-in date')
+     datetopick = Date.today+90
+   when 'check-out date' then
+     @mainpage.clickButton('check-out date')
+     datetopick = Date.today+94
+
    else
      datetopick = Date.today
  end
  @util.selectDateFromDatePicker(datetopick.strftime('%m/%d/%Y'))
- sleep 1
+ sleep 3
 end
 
 
@@ -1800,19 +1811,22 @@ end
 And(/^I click on the "([^"]*)" button on "([^"]*)" page$/) do |button, page|
   case page
     when 'AmexFlight Booking' then
-      case button
-        when 'Search' then
+      if button == 'Search'
           find(:xpath, ".//*[@id='new_flight_search']/fieldset/ol/li/input[@value='Search Flights']").click
       end
     when 'Flex' then
-      case button
-        when 'Select on the first Airline flight card' then
-            @bookflightspage.selectfirstbutton
+      if button == 'Select on the first Airline flight card'
+        @bookflightspage.selectfirstbutton
       end
     when 'AmexCars Booking' then
-      case button
-        when 'Search Cars' then
+      if button == 'Search Cars'
           find(:xpath, ".//*[@id='new_car_search']/fieldset/ol/li/input[@value='Search Cars']").click
+      end
+    when 'AmexHotel Booking' then
+      if button == 'Search Hotels' then
+        find(:xpath, ".//*[@id='new_hotel_search']/fieldset/ol/li/input[@value='Search Hotels']").click
+      elsif button == 'Book Hotel' then
+        @bookhotelspage.selectfirstbutton
       end
     else
       fail(ArgumentError.new('THIS STEP AINT WORKING'))

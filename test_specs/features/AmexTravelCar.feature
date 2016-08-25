@@ -14,6 +14,13 @@ Feature: AmexTravel Car Booking
     Then I verify car pickup in "<city or airport>" on "<time1>" and dropoff on "<time2>"
     And I click on the "Select cheapest car" button
     Then I verify the "Review Your Car Booking" page is displayed
+    #Not sure if this is working correctly...Where is it supposed to print out?
+    Then I print out total cost of "Car Booking"
+
+    ##TO DO:
+    #Verify correct info
+    #Fill out fields for Name etc. Don't click on submit/save whatever
+    #Make a scenario for the other radio button
 
 
     Examples:

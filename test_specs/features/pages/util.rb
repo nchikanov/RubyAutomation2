@@ -12,7 +12,6 @@ class Util < SitePrism::Page
   element :diff_dropoff_radiobutton, :xpath, ".//*[@id='car_search_rental_type_input']/fieldset/ol/li[2]/label/span"
   element :search_city_airport_radiobutton, :xpath, ".//*[@id='car_search_pickup_use_address_input']/fieldset/ol/li[1]/label/span"
   element :search_address_radiobutton, :xpath, ".//*[@id='car_search_pickup_use_address_input']/fieldset/ol/li[2]/label/span"
-  element :car_pickup, :xpath, ".//*[@id='pick_up']"
 
   #AmexTravel Flight Booking
   element :roundtrip_radiobutton, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[1]/label/span"
@@ -28,10 +27,6 @@ class Util < SitePrism::Page
 
   def setValue(element, value)
     case element
-      when 'Where will you pick up the car' then
-        car_pickup.click
-        car_pickup.set value
-        @bookcarspage.selectItemInAutosuggest('car pickup', value)
       when 'Where are you going Hotel' then
         where_going_search_bar.click
         where_going_search_bar.set value
@@ -119,7 +114,7 @@ class Util < SitePrism::Page
       end
     end
 
-    if datepickercurrentmonth_label1.text.to_i == month
+    if (months.index(datepickercurrentmonth_label1.text)+1) == month.to_i
       find(:xpath, ".//*[@id='ui-datepicker-div']/div[1]/table/tbody/tr/td/a[text()='#{day.to_i}']").click
     else
       find(:xpath, ".//*[@id='ui-datepicker-div']/div[2]/table/tbody/tr/td/a[text()='#{day.to_i}']").click
@@ -155,6 +150,21 @@ class Util < SitePrism::Page
       when 'Multi Total Passengers' then
         fail(ArgumentError.new('Passenger total does not match original search')) if has_no_xpath?(".//*[@id='_iz']/div/div/div/div/div/span[2][contains(text(), '#{input}')]")
 
+        #Review Your Trip Flights
+      when 'Endpoint Departure' then
+        fail(ArgumentError.new('Departure airport "from" does not match original search on Review Trip page')) if has_no_xpath?(".//*[@class='slice']/div/div/div/div/div/span[contains(@title, '#{input}')]")
+      when 'Endpoint Arrival' then
+        fail(ArgumentError.new('Arrival airport "from" does not match original search on Review Trip page')) if has_no_xpath?(".//*[@class='slice']/div/div/div/div/div/span[contains(@title, '#{input}')]")
+      when 'Endpoint Departure 2' then
+        fail(ArgumentError.new('Departure airport "to" does not match original search on Review Trip page')) if has_no_xpath?(".//*[@class='slice']/div/div/div/div/div[@class='endpoint arrival']/span[contains(text(), '#{input}')]")
+      when 'Endpoint Arrival 2' then
+        fail(ArgumentError.new('Arrival airport "to" does not match original search on Review Trip page')) if has_no_xpath?(".//*[@class='slice']/div/div/div/div/div[@class='endpoint arrival']/span[contains(text(), '#{input}')]")
+      when 'Endpoint Total Passengers' then
+        fail(ArgumentError.new('Total passengers do not match OG search on Review Trip page')) if has_no_xpath?(".//*[@class='summary']/div/div/div/div[@class='travel'][contains(text(),'#{input}')]")
+      when 'Endpoint Class Type' then
+        fail(ArgumentError.new('Class type doesnt match OG search on Review Trip page')) if has_no_xpath?(".//*[@class='flight-solution _jq-flight _jq-card card-full-width']/div[4]/div/div/ul/li[@class='cabin-type-list'][contains(text(), '#{input}')]")
+
+
         #Cars
       when 'car pickup city' then
         fail(ArgumentError.new('Car pickup city does not match original search')) if has_no_xpath?(".//*[@id='car_search_pickup_location'][@value='#{input}']")
@@ -164,6 +174,14 @@ class Util < SitePrism::Page
         fail(ArgumentError.new('Car pickup time does not match original search')) if has_no_xpath?(".//*[@id='car_search_start_time_input']/a/span[text()='#{input}']")
       when 'car dropoff time' then
         fail(ArgumentError.new('Car dropoff time does not match original search')) if has_no_xpath?(".//*[@id='car_search_end_time_input']/a/span[text()='#{input}']")
+
+        #Hotels
+      when 'hotel city' then
+        fail(ArgumentError.new('Hotel location does not match original search')) if has_no_xpath?(".//*[@id='hotel_search_location_name'][@value ='#{input}']")
+      when 'total guests' then
+        fail(ArgumentError.new('Total number of guests does not match original search')) if has_no_xpath?(".//*[@class='selectBox2-label _js-label'][contains(text(), '#{input}')]")
+      when 'room number' then
+        fail(ArgumentError.new('Number of rooms does not match original search')) if has_no_xpath?(".//*[@id='hotel_search_num_rooms_input']/a/span[contains(text(), '#{input}')]")
     end
   end
 

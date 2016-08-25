@@ -16,17 +16,15 @@ Feature: AmexTravel Flight Booking
     #And I verify the "Interstitial" page is displayed
     Then I verify the "Flex" page is displayed
     And I click on the lowest price option in flex matrix
-    Then I verify that flight info from "<airport>" to "<airport2>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed
+    Then I verify that flight info from "<airport>" to "<airport2>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed on "Flex" page
     And I click on "<codeAirline>" on the flight Matrix
     And I click on the "Select on the first Airline flight card" button on "Flex" page
-    #PROBLEM...goes straight to checkout when it automates but not when I do it manually
     Then I verify the "Review Your Trip" page is displayed
+    #Check this below vv
+    Then I print out total cost of "Roundtrip Flight"
+    Then I verify that flight info from "<airport>" to "<airport2>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed on "Review Your Trip" page
 
-    #NINA, NOTE: CHANGE XPATHS ON PAGES (!!)
-
-    # "starting point" "aiport" "ending point" and "airport2" must be airport abbreviations
-    # options for "time" and "time2" = Anytime, 12am-9am, 6am-noon, 10am-2pm, noon-5pm, 4pm-8pm, 6pm-12am, 1am, 2am, 3am, 4am, 5am, 6am, 7am, 8am, 9am, 10am, 11am, Noon, 1pm, 2pm, 3pm, 4pm, 5pm, 6pm, 7pm, 8pm, 9pm, 10pm, 11pm, Midnight
-    # options for "class type" = Economy, Premium Economy, Business Class, First Class
+    ##TO DO: Update the other two scenarios
     Examples:
     | type of flight | starting point | airport | ending point | airport2 | time     | time2    | seniors | adults | children | class type       | codeAirline     |
     | Round Trip     | SFO            | SFO     | MSP          | MSP      | Anytime  | Anytime  | 0       | 1      | 2        | Economy          | United Airlines |
