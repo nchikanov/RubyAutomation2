@@ -5,9 +5,6 @@ class Users
   @@users['Nina']['firstname'] = 'Nina'
   @@users['Nina']['lastname'] = 'Chikanov'
   @@users['Nina']['email'] = 'nchikanov@gmail.com'
-  @@users['Nina']['phone number'] = '6506194059'
-  @@users['Nina']['country phone code'] = 'Bolivia - 591'
-  @@users['Nina']['country code'] = 'United States (+1)'
 
   @@users['Nina-FB']['password'] = 'S0l0m0n!!'
   @@users['Nina-FB']['firstname'] = 'Nina'
