@@ -20,11 +20,15 @@ Feature: AmexTravel Flight Booking
     And I click on "<codeAirline>" on the flight Matrix
     And I click on the "Select on the first Airline flight card" button on "Flex" page
     Then I verify the "Review Your Trip" page is displayed
-    #Check this below vv
-    Then I print out total cost of "Roundtrip Flight"
+    And I print out total cost of "Roundtrip Flight"
     Then I verify that flight info from "<airport>" to "<airport2>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed on "Review Your Trip" page
+    #And I click on the "Add cheapest hotel" button on "AmexFlight Booking" page  -- COME BACK TO THIS, TRICKY W/ ARRAYS, TRY TO CONTINUE W/O FOR NOW
 
-    ##TO DO: Update the other two scenarios
+    
+    ##TO DO:
+    #Fill out name, info, etc. Don't submit
+    #Finish the other two scenarios w/ verifications and everything
+
     Examples:
     | type of flight | starting point | airport | ending point | airport2 | time     | time2    | seniors | adults | children | class type       | codeAirline     |
     | Round Trip     | SFO            | SFO     | MSP          | MSP      | Anytime  | Anytime  | 0       | 1      | 2        | Economy          | United Airlines |
@@ -60,3 +64,6 @@ Feature: AmexTravel Flight Booking
     Examples:
      | type of flight | place 1 | place 2 | place 3 | time    | time2   | time3   | seniors | adults | children | class type |
      | Multi-City     | SFO     | STL     | LAX     | Anytime | Anytime | Anytime | 1       | 1      | 0        | Economy    |
+
+      #Complete these test cases with steps I'm missing
+      #Execute with a cucumber comment in the terminal and create an HTML report

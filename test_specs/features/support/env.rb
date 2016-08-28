@@ -72,6 +72,7 @@ Before do |scenario|
   @bookflightspage = BookFlightsPage.new
   @bookcarspage = BookCarsPage.new
   @bookhotelspage = BookHotelsPage.new
+  @payments = Payments.new
 end
 
 After do |scenario|
@@ -92,10 +93,11 @@ After do |scenario|
       sw.manage.window.resize_to(width+100, height+100)
       sleep 0.2
     end
-    encoded_img = sw.screenshot_as(:base64)
+
+    page.driver.browser.action.key_down(:shift).send_keys('6').key_up(:shift).perform
+    encoded_img = page.driver.browser.screenshot_as(:base64)
     embed("data:image/png;base64,#{encoded_img}",'image/png')
-    Dir::mkdir('output/screenshots') if not File.directory?('output/screenshots')
     screenshot = "output/screenshots/FAILED_#{@scenario_name.gsub(' ','_').gsub('|','_').gsub(/[^0-9A-Za-z_()]/, '')}_#{Time.new.strftime('%Y%m%d-%H%M%S')}.png"
-    sw.save_screenshot(screenshot)
+    page.driver.browser.save_screenshot(screenshot)
   end
 end

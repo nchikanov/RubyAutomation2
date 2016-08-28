@@ -1813,6 +1813,9 @@ And(/^I click on the "([^"]*)" button on "([^"]*)" page$/) do |button, page|
     when 'AmexFlight Booking' then
       if button == 'Search'
           find(:xpath, ".//*[@id='new_flight_search']/fieldset/ol/li/input[@value='Search Flights']").click
+        if button == 'Add cheapest hotel'
+          @bookflightspage.selectlowestprice('Review Your Flight')
+        end
       end
     when 'Flex' then
       if button == 'Select on the first Airline flight card'
@@ -1823,10 +1826,14 @@ And(/^I click on the "([^"]*)" button on "([^"]*)" page$/) do |button, page|
           find(:xpath, ".//*[@id='new_car_search']/fieldset/ol/li/input[@value='Search Cars']").click
       end
     when 'AmexHotel Booking' then
-      if button == 'Search Hotels' then
+      if button == 'Search Hotels'
         find(:xpath, ".//*[@id='new_hotel_search']/fieldset/ol/li/input[@value='Search Hotels']").click
-      elsif button == 'Book Hotel' then
-        @bookhotelspage.selectfirstbutton
+      elsif button == 'Book Hotel'
+        @bookhotelspage.selectfirstbutton('Book Hotel')
+      elsif button == 'Select best value hotel'
+        @bookhotelspage.selectfirstbutton('Select best value hotel')
+      elsif button = 'Review and Submit Hotel'
+        @mainpage.clickButton('Review and Submit Hotel')
       end
     else
       fail(ArgumentError.new('THIS STEP AINT WORKING'))

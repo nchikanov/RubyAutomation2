@@ -49,6 +49,10 @@ And(/^I set the "([^"]*)" field with "([^"]*)" value$/) do |element, value|
       @bookcarspage.selectItemInAutosuggest('car pickup', value)
     when 'Where are you going Hotel' then
       @bookhotelspage.setvalue(element, value)
+    when 'When are you going Departure' then
+      @bookflightspage.setvalue(element, value)
+    when 'When are you going Return' then
+      @bookflightspage.setvalue(element, value)
   end
 
 end
@@ -78,20 +82,13 @@ end
 
 
 And(/^I click on the lowest price option in flex matrix$/) do
-  @bookflightspage.selectlowestprice
+  @bookflightspage.selectlowestprice('Flex')
 end
 
 And(/^I click on "([^"]*)" on the flight Matrix$/) do |airline|
   @mainpage.clickButton(airline)
 end
 
-Then(/^I verify car pickup in "([^"]*)" on "([^"]*)" and dropoff on "([^"]*)"$/) do |city, time1, time2|
-  @util.verifyElementExists('car pickup city', city)
-  @util.verifyElementExists('car dropoff city', city)
-
-  @util.verifyElementExists('car pickup time', time1)
-  @util.verifyElementExists('car dropoff time', time2)
-end
 
 And(/^I set the "([^"]*)" fields with "([^"]*)" value and "([^"]*)" and "([^"]*)" value of ages "([^"]*)" and "([^"]*)"$/) do |field, room, adults, children, age1, age2|
   #To set rooms, adults, and children
@@ -158,7 +155,10 @@ Then(/^I verify that flight info from "([^"]*)" to "([^"]*)" with "([^"]*)", "([
       @util.verifyElementExists('Endpoint Arrival 2', airport1)
       @util.verifyElementExists('Endpoint Class Type', class_type)
 
-      @util.verifyElementExists('Endpoint Total Passengers', totalpassengers)
+      kids = children.to_i / 2
+      @util.verifyElementExists('Endpoint Adults', adults)
+      @util.verifyElementExists('Endpoint Child In Seat', kids)
+      @util.verifyElementExists('Endpoint Child In Lap', kids)
 
   end
 
@@ -167,16 +167,177 @@ end
 Then(/^I print out total cost of "([^"]*)"$/) do |type|
   case type
     when 'Roundtrip Flight' then
-      total = find(:xpath, ".//*[@id='edit_cart_10316833']/ul/div/div/div/div/div/span[@class='number _jq-total-price bentonSans']")
-      puts total
+      total = find(:xpath, ".//*[@class='total top']/span[@class='number _jq-total-price bentonSans']")::text()
+      currency_symbol = find(:xpath, ".//*[@class='total top']/span[@class='super bentonBold']")::text()
+      puts 'Total cost of roundtrip flight is: ' + currency_symbol + total
     when 'Car Booking' then
-      total = find(:xpath, ".//*[@class='travel-benefits']/div/div/span[@class='number bentonSans _jq-total-price']")
-      puts total
+      total = find(:xpath, ".//*[@class='travel-benefits']/div/div/span[@class='number bentonSans _jq-total-price']")::text()
+      currency_symbol = find(:xpath, ".//*[@class='travel-benefits']/div/div/span[@class='super bentonBold _jq-total-price-symbol']")::text()
+      puts 'Total cost of car booking: ' + currency_symbol + total
     when 'Hotel Reservation' then
-      total = find(:xpath,".//*[@class='App-mainContent']/form/fieldset/div/div/div/div/div/p/span/span[@class='FormattedCurrency-amount']/span")
-      puts total
+      sleep 2
+      total = find(:xpath,".//*[@class='App-mainContent']/form/fieldset/div/div/div/div/div/p/span/span[@class='FormattedCurrency-amount']/span")::text()
+      currency_symbol = find(:xpath, ".//*[@class='App-mainContent']/form/fieldset/div/div/div/div/div/p/span/span[@class='FormattedCurrency-symbol']")::text()
+      puts 'Total cost of hotel reservation: ' + currency_symbol + total
   end
 
   #How to extract text from xpath and print to console#
   #Search for puts or print keywords, and challenge page and tasks page#
+end
+
+
+Then(/^I verify car pickup in "([^"]*)" on "([^"]*)" and dropoff on "([^"]*)" on "([^"]*)" page$/) do |city, time1, time2, page|
+ case page
+   when 'Search Cars' then
+     @util.verifyElementExists('car pickup city', city)
+     @util.verifyElementExists('car dropoff city', city)
+
+     @util.verifyElementExists('car pickup time', time1)
+     @util.verifyElementExists('car dropoff time', time2)
+
+ end
+end
+
+Then(/^I verify car pickup with "([^"]*)" and "([^"]*)" on "([^"]*)" and dropoff on "([^"]*)" on "([^"]*)" page$/) do |aircon, transmission, time1, time2, page|
+  case page
+    when 'Review Your Car Booking' then
+      if aircon == 'Yes'
+        @util.verifyElementExists('AC Option', 'Air Conditioning')
+      end
+
+      @util.verifyElementExists('Transmission Option', transmission + ' Transmission')
+
+      # NOTE - the following xpaths don't have 9:30 a.m. format but rather 9:30am
+      # Could try to figure out how to detect the letters in the string and remove them, make a new string w/o alphanumeric characters
+      # Try this in C++ to see if you remember!!
+      @util.verifyElementExists('Car Pickup Time Review', time1)
+      @util.verifyElementExists('Car Dropoff Time Review', time2)
+
+  end
+end
+
+Then(/^I verify "([^"]*)" value, "([^"]*)" value, and "([^"]*)" value on "([^"]*)" page$/) do |rooms, adults, children, page|
+  case page
+    when 'Hotel Final Booking' then
+      @util.verifyElementExists('Num Hotel Rooms Final', rooms)
+
+      totalguests = (adults.to_i + children.to_i) * rooms.to_i
+      @util.verifyElementExists('Hotel total guests Final', totalguests)
+
+  end
+end
+
+And(/^I set the "([^"]*)" fields with "([^"]*)" values$/) do |fields, user|
+  case fields
+    when 'Traveler Information' then
+      @bookcarspage.fillValue('First Name', @users.getUser(user, 'firstname'))
+      @bookcarspage.fillValue('Last Name', @users.getUser(user, 'lastname'))
+      @bookcarspage.fillValue('Email', @users.getUser(user, 'email'))
+      @bookcarspage.fillValue('Country Code Car', @users.getUser(user, 'country phone code'))
+      @bookcarspage.fillValue('Phone Number Car', @users.getUser(user, 'phone number'))
+
+      #Save & Continue
+      find(:xpath, ".//*[@id='_jq-form-who-is-driving']/button").click
+
+      sleep 3
+
+  end
+end
+
+
+And(/^I set the "([^"]*)" fields with "([^"]*)" and "([^"]*)", "([^"]*)", "([^"]*)", and "(.*) values$/) do |field, room, user1, user2, user3, user4|
+  case field
+    when 'Traveler Information Hotel' then
+      case room
+        when '1' then
+          @bookhotelspage.fillValue('First Name 1', @users.getUser(user1, 'firstname'))
+          @bookhotelspage.fillValue('Last Name 1', @users.getUser(user1, 'lastname'))
+          @bookhotelspage.fillValue('Email', @users.getUser(user1, 'email'))
+          @bookhotelspage.fillValue('Country Code Travel', @users.getUser(user1, 'country code'))
+          @bookhotelspage.fillValue('Phone Number Travel', @users.getUser(user1, 'phone number'))
+
+        when '2' then
+          @bookhotelspage.fillValue('First Name 1', @users.getUser(user1, 'firstname'))
+          @bookhotelspage.fillValue('Last Name 1', @users.getUser(user1, 'lastname'))
+          @bookhotelspage.fillValue('Email', @users.getUser(user1, 'email'))
+          @bookhotelspage.fillValue('Country Code Travel', @users.getUser(user1, 'country code'))
+          @bookhotelspage.fillValue('Phone Number Travel', @users.getUser(user1, 'phone number'))
+
+          sleep 1
+
+          @bookhotelspage.fillValue('First Name 2', @users.getUser(user2, 'firstname'))
+          @bookhotelspage.fillValue('Last Name 2', @users.getUser(user2, 'lastname'))
+
+        when '3' then
+          @bookhotelspage.fillValue('First Name 1', @users.getUser(user1, 'firstname'))
+          @bookhotelspage.fillValue('Last Name 1', @users.getUser(user1, 'lastname'))
+          @bookhotelspage.fillValue('Email', @users.getUser(user1, 'email'))
+          @bookhotelspage.fillValue('Country Code Travel', @users.getUser(user1, 'country code'))
+          @bookhotelspage.fillValue('Phone Number Travel', @users.getUser(user1, 'phone number'))
+
+          sleep 1
+
+          @bookhotelspage.fillValue('First Name 2', @users.getUser(user2, 'firstname'))
+          @bookhotelspage.fillValue('Last Name 2', @users.getUser(user2, 'lastname'))
+          sleep 1
+
+          @bookhotelspage.fillValue('First Name 3', @users.getUser(user3, 'firstname'))
+          @bookhotelspage.fillValue('Last Name 3', @users.getUser(user3, 'lastname'))
+          sleep 1
+
+        when '4' then
+          @bookhotelspage.fillValue('First Name 1', @users.getUser(user1, 'firstname'))
+          @bookhotelspage.fillValue('Last Name 1', @users.getUser(user1, 'lastname'))
+          @bookhotelspage.fillValue('Email', @users.getUser(user1, 'email'))
+          @bookhotelspage.fillValue('Country Code Travel', @users.getUser(user1, 'country code'))
+          @bookhotelspage.fillValue('Phone Number Travel', @users.getUser(user1, 'phone number'))
+          sleep 1
+
+          @bookhotelspage.fillValue('First Name 2', @users.getUser(user2, 'firstname'))
+          @bookhotelspage.fillValue('Last Name 2', @users.getUser(user2, 'lastname'))
+          sleep 1
+
+          @bookhotelspage.fillValue('First Name 3', @users.getUser(user3, 'firstname'))
+          @bookhotelspage.fillValue('Last Name 3', @users.getUser(user3, 'lastname'))
+          sleep 1
+
+          @bookhotelspage.fillValue('First Name 4', @users.getUser(user4, 'firstname'))
+          @bookhotelspage.fillValue('Last Name 4', @users.getUser(user4, 'lastname'))
+          sleep 10
+
+      end
+  end
+end
+
+And(/^I set the "([^"]*)" fields with "([^"]*)"$/) do |field, user|
+  case field
+    when 'Payment Information' then
+      @bookhotelspage.fillValue('Name on card', @payments.getPaymentInfo(user, 'Name on card'))
+      sleep 1
+      @bookhotelspage.fillValue('Card Type', @payments.getPaymentInfo(user, 'Card Type'))
+      sleep 1
+      @bookhotelspage.fillValue('Card Number', @payments.getPaymentInfo(user, 'Card Number'))
+      sleep 1
+      @bookhotelspage.fillValue('Exp. Month', @payments.getPaymentInfo(user, 'Exp. Month'))
+      sleep 1
+      @bookhotelspage.fillValue('Exp. Year', @payments.getPaymentInfo(user, 'Exp. Year'))
+      sleep 1
+      @bookhotelspage.fillValue('CID', @payments.getPaymentInfo(user, 'CID'))
+      sleep 1
+      @bookhotelspage.fillValue('Street Address', @payments.getPaymentInfo(user, 'Street Address'))
+      sleep 1
+      @bookhotelspage.fillValue('Country', @payments.getPaymentInfo(user, 'Country'))
+      sleep 1
+      @bookhotelspage.fillValue('Zip Code', @payments.getPaymentInfo(user, 'Zip Code'))
+      sleep 1
+      @bookhotelspage.fillValue('Town', @payments.getPaymentInfo(user, 'Town'))
+      sleep 1
+      @bookhotelspage.fillValue('State', @payments.getPaymentInfo(user, 'State'))
+      sleep 1
+      @bookhotelspage.fillValue('Country Code Payment', @users.getUser(user, 'country code'))
+      sleep 1
+      @bookhotelspage.fillValue('Phone Number Payment', @users.getUser(user, 'phone number'))
+      sleep 1
+
+  end
 end

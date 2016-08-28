@@ -23,6 +23,9 @@ class BookFlightsPage < SitePrism::Page
  element :air_conditioning, :xpath,  ".//*[@id='car_search_air_conditioning_input']/a"
  element :transmission_button, :xpath, ".//*[@id='car_search_transmission_type_input']/a"
 
+ element :departuredate_field, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_0_departure_date']"
+ element :returndate_field, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_1_departure_date']"
+
    def selectItemInAutosuggest(autosuggestName, item)
      case autosuggestName
        when 'airport1' then
@@ -61,10 +64,19 @@ class BookFlightsPage < SitePrism::Page
 
         selectItemInAutosuggest('dept time', value)
 
+     when 'When are you going Departure' then
+       departuredate_field.click
+       departuredate_field.set(value)
+
+     when 'When are you going Return' then
+       returndate_field.click
+       returndate_field.set(value)
+
      else
        fail(ArgumentError.new("'#{value}' does not exist!"))
 
    end
+
 
 
  end
@@ -172,13 +184,33 @@ class BookFlightsPage < SitePrism::Page
 
   end
 
-  def selectlowestprice
-    if has_xpath? ".//*[@class='lowest-price']/a"
-      #find('a', :match => :first).click
-      first('.lowest-price > a').click
-    else
-      puts "Could not select lowest price"
+  def selectlowestprice(page)
+    case page
+      when 'Flex' then
+        if has_xpath? ".//*[@class='lowest-price']/a"
+          #find('a', :match => :first).click
+          first('.lowest-price > a').click
+        else
+          puts "Could not select lowest price in flex matrix"
+        end
+
+      when 'Review Your Flight' then
+
+        flightPrices = Array.new
+        i = 1
+        until has_no_xpath? ".//*[@id='hia-hotel-cards']/li[#{i}]/div/div/span/span[@class='total-price price block _jq-price-with-tooltip _jq-rate-card-price']"
+          total_price = find(:xpath, ".//*[@id='hia-hotel-cards']/li[#{i}]/div/div/span/span[@class='total-price price block _jq-price-with-tooltip _jq-rate-card-price']")::text()
+          flightPrices.push(total_price)
+          i += 1
+        end
+
+        flightPrices.each { |price| print price + ' ' }
+
+        #Then need to loop through array to see which one is the cheapest, grab that xpath, and click
+
     end
+
+
   end
 
   def selectfirstbutton
@@ -188,5 +220,6 @@ class BookFlightsPage < SitePrism::Page
       puts "Could not select first 'SUBMIT' button"
     end
   end
+
 
 end

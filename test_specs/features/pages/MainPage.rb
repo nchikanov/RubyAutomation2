@@ -55,6 +55,7 @@ class MainPage < SitePrism::Page
   element :check_in, :xpath, ".//*[@id='hotel_search_start_date']"
   element :check_out, :xpath, ".//*[@id='hotel_search_end_date']"
   element :best_val_hotel, :xpath, ".//*[@id='list-view']/li[1]/div/div/a[contains(text(), 'Select')]"
+  element :review_submit_hotel, :xpath, ".//*[@class='PoliciesAgreementCheckbox']/div/label/div[@class='Checkbox-box']"
 
   # region Date Picker - used for AmexTravel Flight
   element :datepickercurrentyear_label, :xpath, ".//*[@id='ui-datepicker-div']//span[@class='ui-datepicker-year']"
@@ -2177,6 +2178,10 @@ class MainPage < SitePrism::Page
       when 'United Airlines' then
         find(:xpath, ".//*[@id='selectable']/thead/tr/th/a/span[text()='#{button}']").click
 
+        #Hotel
+      when 'Review and Submit Hotel' then
+        review_submit_hotel.click
+
         #AmexTravel Car
       when 'pick-up' then
         pick_up_car.click
@@ -2191,6 +2196,7 @@ class MainPage < SitePrism::Page
       when 'check-out date' then
         check_out.click
       when 'Select best value hotel' then
+        sleep 1
         best_val_hotel.click
 
       when 'Change Password Submit' then

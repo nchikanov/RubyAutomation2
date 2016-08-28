@@ -12,6 +12,7 @@ class Util < SitePrism::Page
   element :diff_dropoff_radiobutton, :xpath, ".//*[@id='car_search_rental_type_input']/fieldset/ol/li[2]/label/span"
   element :search_city_airport_radiobutton, :xpath, ".//*[@id='car_search_pickup_use_address_input']/fieldset/ol/li[1]/label/span"
   element :search_address_radiobutton, :xpath, ".//*[@id='car_search_pickup_use_address_input']/fieldset/ol/li[2]/label/span"
+  element :final_agreement, :xpath, ".//*[@id='terms-conditions-section']/div/div/div/div/div/span[@class='ui-checkbox']"
 
   #AmexTravel Flight Booking
   element :roundtrip_radiobutton, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[1]/label/span"
@@ -46,6 +47,9 @@ class Util < SitePrism::Page
         search_city_airport_radiobutton.click
       when 'Search by address' then
         search_address_radiobutton.click
+      when 'Final Agreement' then
+        final_agreement.click
+
 
         ###AmexTravelFlight.feature###
       when 'Round Trip' then
@@ -87,6 +91,7 @@ class Util < SitePrism::Page
   end
 
   def selectDateFromDatePicker(date_to_pick)
+    sleep 3
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     dateArray = date_to_pick.split('/')
     day = dateArray[1]
@@ -159,11 +164,14 @@ class Util < SitePrism::Page
         fail(ArgumentError.new('Departure airport "to" does not match original search on Review Trip page')) if has_no_xpath?(".//*[@class='slice']/div/div/div/div/div[@class='endpoint arrival']/span[contains(text(), '#{input}')]")
       when 'Endpoint Arrival 2' then
         fail(ArgumentError.new('Arrival airport "to" does not match original search on Review Trip page')) if has_no_xpath?(".//*[@class='slice']/div/div/div/div/div[@class='endpoint arrival']/span[contains(text(), '#{input}')]")
-      when 'Endpoint Total Passengers' then
-        fail(ArgumentError.new('Total passengers do not match OG search on Review Trip page')) if has_no_xpath?(".//*[@class='summary']/div/div/div/div[@class='travel'][contains(text(),'#{input}')]")
+      when 'Endpoint Adults' then
+        fail(ArgumentError.new('Total adults do not match OG search on Review Trip page')) if has_no_xpath?(".//*[@class='summary']/div/div/div/div[@class='travel'][contains(text(),'#{input} Adult')]")
       when 'Endpoint Class Type' then
         fail(ArgumentError.new('Class type doesnt match OG search on Review Trip page')) if has_no_xpath?(".//*[@class='flight-solution _jq-flight _jq-card card-full-width']/div[4]/div/div/ul/li[@class='cabin-type-list'][contains(text(), '#{input}')]")
-
+      when 'Endpoint Child In Seat' then
+        fail(ArgumentError.new('No. of children in seat doesnt match OG search on Review Trip page')) if has_no_xpath?(".//*[@class='summary']/div/div/div/div[@class='travel'][contains(text(),'#{input} Infant Seated')]")
+      when 'Endpoint Child In Lap' then
+        fail(ArgumentError.new('No. of children on lap doesnt match OG search on Review Trip page')) if has_no_xpath?(".//*[@class='summary']/div/div/div/div[@class='travel'][contains(text(),'#{input} Infant On Lap')]")
 
         #Cars
       when 'car pickup city' then
@@ -174,6 +182,14 @@ class Util < SitePrism::Page
         fail(ArgumentError.new('Car pickup time does not match original search')) if has_no_xpath?(".//*[@id='car_search_start_time_input']/a/span[text()='#{input}']")
       when 'car dropoff time' then
         fail(ArgumentError.new('Car dropoff time does not match original search')) if has_no_xpath?(".//*[@id='car_search_end_time_input']/a/span[text()='#{input}']")
+      when 'AC Option' then
+        fail(ArgumentError.new('AC Option not shown')) if has_no_xpath?(".//*[@class='car-data']/ul/li[contains(text(),'#{input}' )]")
+      when 'Transmission Option' then
+        fail(ArgumentError.new('Transmission Option not shown')) if has_no_xpath?(".//*[@class='car-data']/ul/li[contains(text(),'#{input}' )]")
+      when 'Car Pickup Time Review' then
+        fail(ArgumentError.new('Car pickup time does not match original search on Review Page')) if has_no_xpath?(".//*[@class='car-data-container']/div[3]/p[@class='locations'][contains(text(),'#{input}')]")
+      when 'Car Dropoff Time Review' then
+        fail(ArgumentError.new('Car dropoff time does not match original search on Review Page')) if has_no_xpath?(".//*[@class='car-data-container']/div[4]/p[@class='locations'][contains(text(),'#{input}')]")
 
         #Hotels
       when 'hotel city' then
@@ -182,6 +198,10 @@ class Util < SitePrism::Page
         fail(ArgumentError.new('Total number of guests does not match original search')) if has_no_xpath?(".//*[@class='selectBox2-label _js-label'][contains(text(), '#{input}')]")
       when 'room number' then
         fail(ArgumentError.new('Number of rooms does not match original search')) if has_no_xpath?(".//*[@id='hotel_search_num_rooms_input']/a/span[contains(text(), '#{input}')]")
+      when 'Num Hotel Rooms Final' then
+        fail(ArgumentError.new('Num of rooms doesnt match OG search in final booking')) if has_no_xpath?(".//*[@class='cursorPointer']/span[text()='#{input} Rooms']")
+      when 'Hotel total guests Final' then
+        fail(ArgumentError.new('Total guest number doesnt match OG search in final booking')) if has_no_xpath?(".//*[@class='cursorPointer']/span[text()='#{input} Guests']")
     end
   end
 

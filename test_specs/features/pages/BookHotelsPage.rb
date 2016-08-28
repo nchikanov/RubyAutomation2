@@ -19,6 +19,35 @@ class BookHotelsPage < SitePrism::Page
   element :child_age_2_3room, :xpath, ".//*[@id='hotel_search_hotel_search_rooms_attributes_2_child_ages_2_age_input']/a"
   element :child_age_2_4room, :xpath, ".//*[@id='hotel_search_hotel_search_rooms_attributes_3_child_ages_2_age_input']/a"
 
+  element :first_name1, :xpath, ".//*[@id='fName']"
+  element :last_name1, :xpath, ".//*[@id='lName']"
+  element :email, :xpath, ".//*[@id='email']"
+  element :country_code, :xpath, ".//*[@class='Select']/button[@class='Select-dropDownBtn']"
+  element :traveler_info, :xpath, ".//*[@class='TravelerInformationContainer']"
+  element :phone_number, :xpath, ".//*[@class='PlaceheldInput isFilled PlaceheldInput--noBorderLeft']/input[@id='phone']"
+  element :first_name2, :xpath, ".//*[@id='addRoom-fname2']"
+  element :last_name2, :xpath, ".//*[@id='addRoom-lname2']"
+  element :first_name3, :xpath, ".//*[@id='addRoom-fname3']"
+  element :last_name3, :xpath, ".//*[@id='addRoom-lname3']"
+  element :first_name4, :xpath, ".//*[@id='addRoom-fname4']"
+  element :last_name4, :xpath, ".//*[@id='addRoom-lname4']"
+
+  element :name_on_card, :xpath, ".//*[@id='cardInfo_nameOnCard']"
+  element :card_type, :xpath, ".//*[@class='NewCardInformation-cardInfo']/div/div/div/div/div[@class='Select-value']"
+  element :card_number, :xpath, ".//*[@id='cardInfo_cardNumber']"
+  element :exp_month, :xpath, ".//*[@id='cardInfo_expMonth']"
+  element :exp_year, :xpath, ".//*[@id='cardInfo_expYear']"
+  element :cid, :xpath, ".//*[@id='cardInfo_cid']"
+  element :street_address, :xpath, ".//*[@id='billingInfo_address1']"
+  element :country, :xpath, ".//*[@class='NewCardInformation-billingInfo']/div/div/div/button[@class='Select-dropDownBtn']"
+  element :country_code_pay, :xpath, ".//*[@class='FormRow-colHalf']/div/button[@class='Select-dropDownBtn']"
+  element :zip_code, :xpath, ".//*[@id='billingInfo_zip']"
+  element :town, :xpath, ".//*[@id='billingInfo_town']"
+  element :umbrella_country, :xpath, ".//*[@class='FormRow-colHalf']"
+  element :state, :xpath, ".//*[@class='NewCardInformation']/div/div/div/div/div/div/div/div[text()='*State']"
+  element :new_card_info, :xpath, ".//*[@class='NewCardInformation']"
+
+
 
   def setvalue(field, value)
     case field
@@ -224,11 +253,95 @@ class BookHotelsPage < SitePrism::Page
     end
   end
 
-  def selectfirstbutton
-    if has_xpath? ".//*[@class='DetailCard-bookButton DetailResults-bookButton _jq-detailCard-bookButton ng-scope'][text()='Book']"
-      find('button', text: 'Book', :match => :first).click
-    else
-      puts "Could not select first 'BOOK' button"
+  def selectfirstbutton(page)
+    case page
+      when 'Book Hotel' then
+        if has_xpath? ".//*[@class='ng-pristine ng-valid']/div/button[text()='Book']"
+          find('button', text: 'Book', :match => :first).click
+        else
+          puts "Could not select first 'BOOK' button"
+        end
+
+      when 'Select best value hotel' then
+        if has_xpath? ".//*[@id='list-view']/li/div/div/a[contains(text(),'Select')]"
+          #first('.list-view > a').click
+          find('a', text: 'Select', :match => :first).click
+        else
+          puts "Could not select best value hotel"
+        end
+
+    end
+
+  end
+
+  def fillValue(field, value)
+    case field
+      when 'First Name 1' then
+        first_name1.set value
+      when 'Last Name 1' then
+        last_name1.set value
+      when 'First Name 2' then
+        first_name2.set value
+      when 'Last Name 2' then
+        last_name2.set value
+      when 'First Name 3' then
+        first_name3.set value
+      when 'Last Name 3' then
+        last_name3.set value
+      when 'First Name 4' then
+        first_name4.set value
+      when 'Last Name 4' then
+        last_name4.set value
+      when 'Email' then
+        email.set value
+      when 'Country Code Travel' then
+        country_code.click
+        find(:xpath, ".//*[@class='Select-options']/div[text()='#{value}']").click
+      when 'Country Code Payment' then
+        country_code_pay.click
+
+        find(:xpath, ".//*[@class='FormRow-colHalf']/div/div/div/div[text()='#{value}']").click
+
+      when 'Phone Number Travel' then
+        within traveler_info do
+          #phone_number.click
+          phone_number.send_keys(value.reverse)
+        end
+      when 'Phone Number Payment' then
+        within new_card_info do
+          #phone_number.click
+          phone_number.send_keys(value.reverse)
+        end
+
+      when 'Name on card' then
+        name_on_card.set value
+      when 'Card Type' then
+        card_type.click
+        find(:xpath, ".//*[@class='NewCardInformation-cardInfo']/div/div/div/div/div/div[text()='#{value}']").click
+
+
+      when 'Card Number' then
+        card_number.set value
+      when 'Exp. Month' then
+        exp_month.set value
+      when 'Exp. Year' then
+        exp_year.set value
+      when 'CID' then
+        cid.set value
+      when 'Street Address' then
+        street_address.set value
+      when 'Country' then
+        country.click
+        find(:xpath, ".//*[@class='Select-options']/div[text()='#{value}']").click
+      when 'Zip Code' then
+        zip_code.set value
+      when 'Town' then
+        town.set value
+
+      when 'State' then
+        state.click
+        find(:xpath, ".//*[@class='FormRow-colShort']/div/div/div/div[text()='#{value}']").click
+
     end
   end
 
