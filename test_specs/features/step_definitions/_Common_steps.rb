@@ -1813,10 +1813,18 @@ And(/^I click on the "([^"]*)" button on "([^"]*)" page$/) do |button, page|
     when 'AmexFlight Booking' then
       if button == 'Search'
           find(:xpath, ".//*[@id='new_flight_search']/fieldset/ol/li/input[@value='Search Flights']").click
-        if button == 'Add cheapest hotel'
-          @bookflightspage.selectlowestprice('Review Your Flight')
-        end
+      elsif button == 'Add cheapest hotel'
+         @bookflightspage.selectlowestprice('Review Your Flight')
+      elsif button == 'Continue without Hotel'
+         find(:xpath, ".//*[@class='continue-without-hotel']").click
+      elsif button == 'Traveler Save & Continue'
+          find(:xpath, ".//*[@id='traveler-info-checkout']/div/div/div/button").click
+      elsif button == 'Continue Booking'
+        find(:xpath, ".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Continue Booking']").click
+      elsif button == 'I have read and agree to the policies, rules, and restrictions'
+        find(:xpath, ".//*[@id='booking-info']/div/div/div/div/div/span[@class='ui-checkbox']").click
       end
+
     when 'Flex' then
       if button == 'Select on the first Airline flight card'
         @bookflightspage.selectfirstbutton
@@ -1832,7 +1840,7 @@ And(/^I click on the "([^"]*)" button on "([^"]*)" page$/) do |button, page|
         @bookhotelspage.selectfirstbutton('Book Hotel')
       elsif button == 'Select best value hotel'
         @bookhotelspage.selectfirstbutton('Select best value hotel')
-      elsif button = 'Review and Submit Hotel'
+      elsif button == 'Review and Submit Hotel'
         @mainpage.clickButton('Review and Submit Hotel')
       end
     else

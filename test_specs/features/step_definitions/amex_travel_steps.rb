@@ -19,7 +19,9 @@ end
 
 And(/^I set the radio buttons to "([^"]*)" and "([^"]*)"$/) do |button1, button2|
   @util.selectRadioButton(button1)
+  #find(:xpath, ".//*[@id='car_search_rental_type_input']/fieldset/ol/li[1]/label/span").click
   @util.selectRadioButton(button2)
+  #find(:xpath, ".//*[@id='car_search_pickup_use_address_input']/fieldset/ol/li[1]/label/span").click
 
 end
 
@@ -311,7 +313,7 @@ end
 
 And(/^I set the "([^"]*)" fields with "([^"]*)"$/) do |field, user|
   case field
-    when 'Payment Information' then
+    when 'Payment Information Hotel' then
       @bookhotelspage.fillValue('Name on card', @payments.getPaymentInfo(user, 'Name on card'))
       sleep 1
       @bookhotelspage.fillValue('Card Type', @payments.getPaymentInfo(user, 'Card Type'))
@@ -338,6 +340,60 @@ And(/^I set the "([^"]*)" fields with "([^"]*)"$/) do |field, user|
       sleep 1
       @bookhotelspage.fillValue('Phone Number Payment', @users.getUser(user, 'phone number'))
       sleep 1
+
+    when 'Traveler 1 - Adult' then
+      @bookflightspage.fillValue('First Name', @users.getUser(user, 'firstname'))
+      @bookflightspage.fillValue('Last Name', @users.getUser(user, 'lastname'))
+      @bookflightspage.fillValue('Email', @users.getUser(user, 'email'))
+      @bookflightspage.fillValue('Country Code', @users.getUser(user, 'country phone code'))
+      @bookflightspage.fillValue('Phone Number', @users.getUser(user, 'phone number'))
+      @bookflightspage.fillValue('State of Residence', @payments.getPaymentInfo(user, 'State'))
+      @bookflightspage.fillValue('Gender', @users.getUser(user, 'gender'))
+      @bookflightspage.fillValue('DOB', @users.getUser(user, 'DOB'))
+
+
+    when 'Traveler 2 - Infant Seated' then
+      @bookflightspage.fillValue('First Name 2', @users.getUser(user, 'firstname'))
+      @bookflightspage.fillValue('Last Name 2', @users.getUser(user, 'lastname'))
+      @bookflightspage.fillValue('Gender 2', @users.getUser(user, 'gender'))
+      @bookflightspage.fillValue('DOB 2', @users.getUser(user, 'dob'))
+
+
+    when 'Traveler 3 - Infant On Lap' then
+      @bookflightspage.fillValue('First Name 3', @users.getUser(user, 'firstname'))
+      @bookflightspage.fillValue('Last Name 3', @users.getUser(user, 'lastname'))
+      @bookflightspage.fillValue('Gender 3', @users.getUser(user, 'gender'))
+      @bookflightspage.fillValue('DOB 3', @users.getUser(user, 'dob'))
+
+
+    when 'Travel Insurance' then
+      choice = user
+      if choice == 'Yes' #Choice, not user in this case
+        @util.selectRadioButton('Travel Insurance Yes')
+      elsif choice == 'No'
+        @util.selectRadioButton('Travel Insurance No')
+      end
+
+      #Save & Continue
+      find(:xpath, ".//*[@class='seats-buttons ui-helper-clearfix']/button[@id='trip_insurance_no_submit']").click
+
+    when 'Payment Information Flight' then
+      @bookflightspage.fillValue('Card Type', @payments.getPaymentInfo(user, 'Card Type'))
+      @bookflightspage.fillValue('Card Number', @payments.getPaymentInfo(user, 'Card Number'))
+      @bookflightspage.fillValue('CID', @payments.getPaymentInfo(user, 'CID'))
+      @bookflightspage.fillValue('Exp. Year', @payments.getPaymentInfo(user, 'Exp. Year'))
+      @bookflightspage.fillValue('Exp. Month', @payments.getPaymentInfo(user, 'Exp. Month'))
+      @bookflightspage.fillValue('Cardholder Name', @payments.getPaymentInfo(user, 'Name on card'))
+      @bookflightspage.fillValue('Country', @payments.getPaymentInfo(user, 'Country'))
+      @bookflightspage.fillValue('Street Address', @payments.getPaymentInfo(user, 'Street Address'))
+      @bookflightspage.fillValue('Town', @payments.getPaymentInfo(user, 'Town'))
+      @bookflightspage.fillValue('State', @payments.getPaymentInfo(user, 'State'))
+      @bookflightspage.fillValue('Zip Code', @payments.getPaymentInfo(user, 'Zip Code'))
+      @bookflightspage.fillValue('Country Phone Code', @users.getUser(user, 'country phone code'))
+      @bookflightspage.fillValue('Phone Number 2', @users.getUser(user, 'phone number'))
+
+      #Save & Continue
+    find(:xpath, ".//*[@id='paymodule']/div/div/button").click
 
   end
 end

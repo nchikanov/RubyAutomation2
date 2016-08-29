@@ -18,6 +18,8 @@ class Util < SitePrism::Page
   element :roundtrip_radiobutton, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[1]/label/span"
   element :oneway_radiobutton, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[2]/label/span"
   element :multicity_radiobutton, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[3]/label/span"
+  element :travel_yes, :xpath, ".//*[@id='trip-insurance-body']/div/div[2]/span"
+  element :travel_no, :xpath, ".//*[@id='trip-insurance-body']/div/div[3]/span"
 
   #AmexTravel Hotel Booking
   element :city_landmark_search, :xpath, ".//*[@id='new_hotel_search']/fieldset[1]/ol/div/span[1]"
@@ -58,6 +60,10 @@ class Util < SitePrism::Page
         oneway_radiobutton.click
       when 'Multi-City' then
         multicity_radiobutton.click
+      when 'Travel Insurance Yes' then
+        travel_yes.click
+      when 'Travel Insurance No' then
+        travel_no.click
 
         ###AmexTravelHotel.feature###
       when 'Search by city or landmark' then

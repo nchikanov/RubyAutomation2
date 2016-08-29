@@ -23,7 +23,7 @@ Feature: AmexTravel Hotel
     And I print out total cost of "Hotel Reservation"
     Then I verify "<room>" value, "<adults>" value, and "<children>" value on "Hotel Final Booking" page
     And I set the "Traveler Information Hotel" fields with "<room>" and "<user1>", "<user2>", "<user3>", and "<user4> values
-    And I set the "Payment Information" fields with "<user1>"
+    And I set the "Payment Information Hotel" fields with "<user1>"
     And I click on the "Review and Submit Hotel" button on "AmexHotel Booking" page
 
     #Only issue right now is with the card_type drop down. Element not clickable b/c the scroll skips right over it. Otherwise it works!

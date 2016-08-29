@@ -23,15 +23,23 @@ Feature: AmexTravel Flight Booking
     And I print out total cost of "Roundtrip Flight"
     Then I verify that flight info from "<airport>" to "<airport2>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed on "Review Your Trip" page
     #And I click on the "Add cheapest hotel" button on "AmexFlight Booking" page  -- COME BACK TO THIS, TRICKY W/ ARRAYS, TRY TO CONTINUE W/O FOR NOW
-
+    And I click on the "Continue without Hotel" button on "AmexFlight Booking" page
+    And I set the "Traveler 1 - Adult" fields with "<user1>"
+    And I set the "Traveler 2 - Infant Seated" fields with "<user2>"
+    And I set the "Traveler 3 - Infant On Lap" fields with "<user3>"
+    And I click on the "Traveler Save & Continue" button on "AmexFlight Booking" page
+    And I set the "Travel Insurance" fields with "<travel insurance>"
+    And I click on the "Continue Booking" button on "AmexFlight Booking" page
+    And I set the "Payment Information Flight" fields with "<user1>"
+    And I click on the "I have read and agree to the policies, rules, and restrictions" button on "AmexFlight Booking" page
     
     ##TO DO:
-    #Fill out name, info, etc. Don't submit
     #Finish the other two scenarios w/ verifications and everything
+    #Select the add hotel option with the flight
 
     Examples:
-    | type of flight | starting point | airport | ending point | airport2 | time     | time2    | seniors | adults | children | class type       | codeAirline     |
-    | Round Trip     | SFO            | SFO     | MSP          | MSP      | Anytime  | Anytime  | 0       | 1      | 2        | Economy          | United Airlines |
+    | type of flight | starting point | airport | ending point | airport2 | time     | time2    | seniors | adults | children | class type       | codeAirline     | user1 | user2 | user3 | travel insurance |
+    | Round Trip     | SFO            | SFO     | MSP          | MSP      | Anytime  | Anytime  | 0       | 1      | 2        | Economy          | United Airlines | Nina  | Mario | Peach | No               |
 
   Scenario Outline: Book a nonstop, one way flight for 1 adult, 2 children
     Given I navigate to the external "flights" site

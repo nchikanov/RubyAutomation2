@@ -26,6 +26,41 @@ class BookFlightsPage < SitePrism::Page
  element :departuredate_field, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_0_departure_date']"
  element :returndate_field, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_1_departure_date']"
 
+ element :first_name, :xpath, ".//*[@id='cart_passengers_attributes_0_first_name']"
+ element :last_name, :xpath, ".//*[@id='cart_passengers_attributes_0_last_name']"
+ element :email, :xpath, ".//*[@class='customer-form']/div/div/div/div/ul/li/input[@type='text']"
+ element :country_code, :xpath, ".//*[@class='customer-form']/div/div/div/a"
+ element :phone_number, :xpath, ".//*[@id='traveler-info-checkout']/div/div/div/fieldset/div/div/div/div/input[@class='required phone-number _jq-traveler-phone-number _jq_mask_input']"
+ element :state, :xpath, ".//*[@id='cart_customer_attributes_state_of_residence_input']/a/span[@class='selectBox-arrow']"
+ element :gender, :xpath, ".//*[@id='cart_passengers_attributes_0_gender_input']/a/span[@class='selectBox-arrow']"
+ element :dob, :xpath, ".//*[@id='cart_passengers_attributes_0_date_of_birth']"
+
+ element :first_name_2, :xpath, ".//*[@id='cart_passengers_attributes_1_first_name']"
+ element :last_name_2, :xpath, ".//*[@id='cart_passengers_attributes_1_last_name']"
+ element :gender_2, :xpath, ".//*[@id='cart_passengers_attributes_1_gender_input']/a/span[@class='selectBox-arrow']"
+ element :dob_2, :xpath, ".//*[@id='cart_passengers_attributes_1_date_of_birth']"
+
+ element :first_name_3, :xpath, ".//*[@id='cart_passengers_attributes_2_first_name']"
+ element :last_name_3, :xpath, ".//*[@id='cart_passengers_attributes_2_last_name']"
+ element :gender_3, :xpath, ".//*[@id='cart_passengers_attributes_2_gender_input']/a/span[@class='selectBox-arrow']"
+ element :dob_3, :xpath, ".//*[@id='cart_passengers_attributes_2_date_of_birth']"
+
+ element :card_type, :xpath, ".//*[@id='cart_customer_attributes_credit_card_attributes_type_input']/a"
+ element :card_number, :xpath, ".//*[@id='paymodule-pay-with-any-card']/div/div/fieldset/input[@type='text']"
+ element :cid, :xpath, ".//*[@id='cart_customer_attributes_credit_card_attributes_verification_number']"
+ element :exp_month, :xpath, ".//*[@id='cart_customer_attributes_credit_card_attributes_exp_month_input']/a/span[@class='selectBox-arrow']"
+ element :exp_year, :xpath, ".//*[@id='cart_customer_attributes_credit_card_attributes_exp_year_input']/a/span[@class='selectBox-arrow']"
+ element :cardholder_name, :xpath, ".//*[@id='cart_customer_attributes_credit_card_attributes_cardholder_name']"
+ element :country, :xpath, ".//*[@id='cart_customer_attributes_country_code_input']/a/span[@class='selectBox-arrow']"
+ element :street_address, :xpath, ".//*[@id='cart_customer_attributes_address1']"
+ element :town, :xpath, ".//*[@id='cart_customer_attributes_city']"
+ element :state_2, :xpath, ".//*[@id='cart_customer_attributes_state_province_code_input']/a/span[@class='selectBox-arrow']"
+ element :zip_code, :xpath, ".//*[@id='cart_customer_attributes_postal_code']"
+ element :phone_code, :xpath, ".//*[@id='paymodule-pay-with-any-card']/div/fieldset/div/a"
+ element :phone_number_2, :xpath, ".//*[@id='paymodule-pay-with-any-card']/div/fieldset/div/input[@class='phone-number _billing_phone phone _jq-traveler-phone-number _jq_mask_input required']"
+
+
+
    def selectItemInAutosuggest(autosuggestName, item)
      case autosuggestName
        when 'airport1' then
@@ -221,5 +256,92 @@ class BookFlightsPage < SitePrism::Page
     end
   end
 
+  def fillValue(field, value)
+    case field
+
+      ##TRAVELER INFORMATION
+
+      when 'First Name' then
+        first_name.set value
+      when 'Last Name' then
+        last_name.set value
+      when 'Email' then
+        email.set value
+      when 'Country Code' then
+        country_code.click
+        find(:xpath, "html/body/ul[1]/li/a[text()='#{value}']").click
+      when 'Phone Number' then
+        phone_number.click
+        phone_number.send_keys(value)
+      when 'State of Residence' then
+        state.click
+        find(:xpath, "html/body/ul/li/a[@rel='#{value}']").click
+      when 'Gender' then
+        gender.click
+        find(:xpath, "html/body/ul[3]/li/a[@rel='#{value}']").click
+      when 'DOB' then
+        dob.click
+        dob.send_keys(value)
+
+      when 'First Name 2' then
+        first_name_2.set value
+      when 'Last Name 2' then
+        last_name_2.set value
+      when 'Gender 2' then
+        gender_2.click
+        find(:xpath, "html/body/ul[6]/li/a[@rel='#{value}']").click
+      when 'DOB 2' then
+        dob_2.click
+        dob_2.send_keys(value)
+
+      when 'First Name 3' then
+        first_name_3.set value
+      when 'Last Name 3' then
+        last_name_3.set value
+      when 'Gender 3' then
+        gender_3.click
+        find(:xpath, "html/body/ul[9]/li/a[@rel='#{value}']").click
+      when 'DOB 3' then
+        dob_3.click
+        dob_3.send_keys(value)
+
+        ##PAYMENT INFORMATION
+      when 'Card Type' then
+        card_type.click
+        find(:xpath, "html/body/ul/li/a[text()='#{value}']").click
+      when 'Card Number' then
+        card_number.set value
+      when 'CID' then
+        cid.set value
+      when 'Exp. Month' then
+        exp_month.click
+        find(:xpath, "html/body/ul/li/a[@rel='#{value}']").click
+      when 'Exp. Year' then
+        exp_year.click
+        find(:xpath, "html/body/ul/li/a[text()='#{value}']").click
+      when 'Cardholder Name' then
+        cardholder_name.set value
+      when 'Country' then
+        country.click
+        find(:xpath, "html/body/ul/li/a[text()='#{value}']").click
+      when 'Street Address' then
+        street_address.set value
+      when 'Town' then
+        town.set value
+      when 'State' then
+        state_2.click
+        find(:xpath, "html/body/ul/li/a[@rel='#{value}']").click
+      when 'Zip Code' then
+        zip_code.set value
+      when 'Country Phone Code' then
+        phone_code.click
+        find(:xpath, "html/body/ul[16]/li/a[text()='#{value}']").click
+      when 'Phone Number 2' then
+        phone_number_2.click
+        phone_number_2.send_keys(value)
+
+
+    end
+  end
 
 end
