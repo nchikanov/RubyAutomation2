@@ -20,6 +20,7 @@ Feature: AmexTravel Car Booking
     And I set the radio button to "Final Agreement"
 
     #Make a scenario for the other radio button
+    #Run with different user every time
 
 
     Examples:

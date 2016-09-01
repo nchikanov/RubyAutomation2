@@ -345,4 +345,27 @@ class BookHotelsPage < SitePrism::Page
     end
   end
 
+
+  def scrollUntilElemFound(widget, xpath)
+    idWidget = case widget
+                 when 'Card Type Hotel Payment Info' then
+                   '.NewCardInformation-cardInfo'
+                   #'.App-mainContent'
+               end
+    outerHeight = page.execute_script("return $('#{idWidget}').outerHeight();")
+    scrollHeight = page.execute_script("return $('#{idWidget}').get(0).scrollHeight;")
+    scrollTop = page.execute_script("return $('#{idWidget}').scrollTop();")
+
+    y = 400
+    contentFound = has_xpath?(xpath)
+    while ((scrollTop+outerHeight) < scrollHeight) and !contentFound do
+      page.execute_script("$('#{idWidget}').scrollTop(#{y})")
+      scrollTop = page.execute_script("return $('#{idWidget}').scrollTop();")
+      within(idWidget) do
+        contentFound = has_xpath?(xpath)
+      end
+      y += 400
+    end
+  end
+
 end

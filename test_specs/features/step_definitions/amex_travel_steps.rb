@@ -31,6 +31,7 @@ And(/^I set the "([^"]*)" fields with "([^"]*)" value and "([^"]*)" value$/) do 
      @bookhotelspage.set2values(element, value1, value2)
    when 'Where are you going' then
      @bookflightspage.set2values(element, value1, value2)
+     sleep 5
    when 'When are you going' then
      @bookflightspage.set2values(element, value1, value2)
    when 'Children Age' then
@@ -315,31 +316,32 @@ And(/^I set the "([^"]*)" fields with "([^"]*)"$/) do |field, user|
   case field
     when 'Payment Information Hotel' then
       @bookhotelspage.fillValue('Name on card', @payments.getPaymentInfo(user, 'Name on card'))
-      sleep 1
+
+      #scroll until element found
+      xpath_hotel = ".//*[@class='NewCardInformation-cardInfo']/div/div/div/div[@class='Select-inputContainer']"
+      @bookhotelspage.scrollUntilElemFound('Card Type Hotel Payment Info', xpath_hotel)
+
       @bookhotelspage.fillValue('Card Type', @payments.getPaymentInfo(user, 'Card Type'))
-      sleep 1
+
       @bookhotelspage.fillValue('Card Number', @payments.getPaymentInfo(user, 'Card Number'))
-      sleep 1
+
       @bookhotelspage.fillValue('Exp. Month', @payments.getPaymentInfo(user, 'Exp. Month'))
-      sleep 1
+
       @bookhotelspage.fillValue('Exp. Year', @payments.getPaymentInfo(user, 'Exp. Year'))
-      sleep 1
+
       @bookhotelspage.fillValue('CID', @payments.getPaymentInfo(user, 'CID'))
-      sleep 1
+
       @bookhotelspage.fillValue('Street Address', @payments.getPaymentInfo(user, 'Street Address'))
-      sleep 1
+
       @bookhotelspage.fillValue('Country', @payments.getPaymentInfo(user, 'Country'))
-      sleep 1
       @bookhotelspage.fillValue('Zip Code', @payments.getPaymentInfo(user, 'Zip Code'))
-      sleep 1
+
       @bookhotelspage.fillValue('Town', @payments.getPaymentInfo(user, 'Town'))
-      sleep 1
       @bookhotelspage.fillValue('State', @payments.getPaymentInfo(user, 'State'))
-      sleep 1
       @bookhotelspage.fillValue('Country Code Payment', @users.getUser(user, 'country code'))
-      sleep 1
+
       @bookhotelspage.fillValue('Phone Number Payment', @users.getUser(user, 'phone number'))
-      sleep 1
+
 
     when 'Traveler 1 - Adult' then
       @bookflightspage.fillValue('First Name', @users.getUser(user, 'firstname'))

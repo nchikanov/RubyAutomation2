@@ -1,6 +1,8 @@
 
 class BookFlightsPage < SitePrism::Page
 
+  @@hotelHash =  Hash.new { |h,k| h[k] = {} }
+
  element :departure_airport, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_0_departure_search_for']"
  element :departure_airport_2, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_1_departure_search_for']"
  element :departure_airport_3, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_2_departure_search_for']"
@@ -59,7 +61,79 @@ class BookFlightsPage < SitePrism::Page
  element :phone_code, :xpath, ".//*[@id='paymodule-pay-with-any-card']/div/fieldset/div/a"
  element :phone_number_2, :xpath, ".//*[@id='paymodule-pay-with-any-card']/div/fieldset/div/input[@class='phone-number _billing_phone phone _jq-traveler-phone-number _jq_mask_input required']"
 
+  element :hotel_cards_umbrella, :xpath, ".//*[@id='hia-hotel-cards']"
 
+  @@addHotelToFlightContainer = ".product-results"
+
+  def scrollUntilElemFound(widget, xpath)
+    idWidget = case widget
+                 when 'Add Hotel to Flight' then
+                   @@addHotelToFlightContainer
+               end
+    outerHeight = page.execute_script("return $('#{idWidget}').outerHeight();")
+    scrollHeight = page.execute_script("return $('#{idWidget}').get(0).scrollHeight;")
+    scrollTop = page.execute_script("return $('#{idWidget}').scrollTop();")
+
+    y = 400
+    contentFound = has_xpath?(xpath)
+    while ((scrollTop+outerHeight) < scrollHeight) and !contentFound do
+      page.execute_script("$('#{idWidget}').scrollTop(#{y})")
+      scrollTop = page.execute_script("return $('#{idWidget}').scrollTop();")
+      within(idWidget) do
+        contentFound = has_xpath?(xpath)
+      end
+      y += 400
+    end
+  end
+
+  def addHotelInfo(info, data)
+    @@hotelHash['Hotel'][info] = data
+  end
+
+  def getHotelInfo(info)
+    puts @@hotelHash['Hotel'][info]
+  end
+
+  def findCheapestHotel
+    #View all hotels
+    find(:xpath, ".//*[@class='product-results']/button[text()='View all hotels']").click
+
+    i = 2
+    #first hotel they suggest, used to compare to others :)
+    lowest_cost = find(:xpath, ".//*[@id='hia-hotel-cards']/li[1]/div/div/span/span[@class='total-price price block _jq-price-with-tooltip _jq-rate-card-price']")::text()
+    #Gets rid of any characters that aren't numeric
+    lowest_cost2 = lowest_cost.gsub(/[^0-9]/, "")
+
+    while has_xpath?".//*[@id='hia-hotel-cards']/li[#{i}]/div/div/span/span[@class='total-price price block _jq-price-with-tooltip _jq-rate-card-price']"
+      total_cost = find(:xpath, ".//*[@id='hia-hotel-cards']/li[#{i}]/div/div/span/span[@class='total-price price block _jq-price-with-tooltip _jq-rate-card-price']")::text()
+      total_cost2 = total_cost.gsub(/[^0-9]/, "")
+
+      if total_cost2.to_i < lowest_cost2.to_i
+        lowest_cost2 = total_cost2
+        tempIndex = i
+      end
+
+      i = i + 1
+
+      hotel_path = ".//*[@id='hia-hotel-cards']/li[#{i}]/div/div/span/span[@class='total-price price block _jq-price-with-tooltip _jq-rate-card-price']"
+      if has_no_xpath? hotel_path
+        scrollUntilElemFound('Add Hotel to Flight', hotel_path)
+      end
+
+
+    end
+
+      puts 'Index of lowest price is: ' + tempIndex.to_s
+      puts 'There are ' + i.to_s + ' xpaths that I shuffled through'
+
+      low = find(:xpath, ".//*[@id='hia-hotel-cards']/li[#{tempIndex}]/div/div/span/span[@class='total-price price block _jq-price-with-tooltip _jq-rate-card-price']")::text()
+      puts 'Lowest cost of hotel: ' + low.to_s
+
+    #Select Lowest Hotel to add
+    find(:xpath, ".//*[@id='hia-hotel-cards']/li[#{tempIndex}]/div/a[@class='select-button _jq-hotel-select-button']").click
+
+
+  end
 
    def selectItemInAutosuggest(autosuggestName, item)
      case autosuggestName
@@ -229,19 +303,6 @@ class BookFlightsPage < SitePrism::Page
           puts "Could not select lowest price in flex matrix"
         end
 
-      when 'Review Your Flight' then
-
-        flightPrices = Array.new
-        i = 1
-        until has_no_xpath? ".//*[@id='hia-hotel-cards']/li[#{i}]/div/div/span/span[@class='total-price price block _jq-price-with-tooltip _jq-rate-card-price']"
-          total_price = find(:xpath, ".//*[@id='hia-hotel-cards']/li[#{i}]/div/div/span/span[@class='total-price price block _jq-price-with-tooltip _jq-rate-card-price']")::text()
-          flightPrices.push(total_price)
-          i += 1
-        end
-
-        flightPrices.each { |price| print price + ' ' }
-
-        #Then need to loop through array to see which one is the cheapest, grab that xpath, and click
 
     end
 
@@ -343,5 +404,7 @@ class BookFlightsPage < SitePrism::Page
 
     end
   end
+
+
 
 end

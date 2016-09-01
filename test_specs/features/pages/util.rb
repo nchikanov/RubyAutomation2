@@ -28,6 +28,7 @@ class Util < SitePrism::Page
 
 
 
+
   def setValue(element, value)
     case element
       when 'Where are you going Hotel' then
@@ -115,7 +116,7 @@ class Util < SitePrism::Page
       end
     end
     #Manage the picker to reach specified month
-    if month.to_i > (months.index(datepickercurrentmonth_label2.text)+1)
+    if month.to_i > (months.index(datepickercurrentmonth_label2.text)+1) and datepickercurrentyear_label2.text.to_i == year.to_i
       while month.to_i > (months.index(datepickercurrentmonth_label2.text)+1) do
         datepickernext_button.click
       end

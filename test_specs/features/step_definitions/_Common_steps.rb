@@ -1787,7 +1787,7 @@ And(/^I select a date from the datepicker on the "([^"]*)" section$/) do |date|
      datetopick = Date.today
  end
  @util.selectDateFromDatePicker(datetopick.strftime('%m/%d/%Y'))
- sleep 3
+ sleep 5
 end
 
 
@@ -1814,7 +1814,7 @@ And(/^I click on the "([^"]*)" button on "([^"]*)" page$/) do |button, page|
       if button == 'Search'
           find(:xpath, ".//*[@id='new_flight_search']/fieldset/ol/li/input[@value='Search Flights']").click
       elsif button == 'Add cheapest hotel'
-         @bookflightspage.selectlowestprice('Review Your Flight')
+         @bookflightspage.findCheapestHotel
       elsif button == 'Continue without Hotel'
          find(:xpath, ".//*[@class='continue-without-hotel']").click
       elsif button == 'Traveler Save & Continue'
@@ -1823,11 +1823,15 @@ And(/^I click on the "([^"]*)" button on "([^"]*)" page$/) do |button, page|
         find(:xpath, ".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Continue Booking']").click
       elsif button == 'I have read and agree to the policies, rules, and restrictions'
         find(:xpath, ".//*[@id='booking-info']/div/div/div/div/div/span[@class='ui-checkbox']").click
+
       end
+
 
     when 'Flex' then
       if button == 'Select on the first Airline flight card'
+
         @bookflightspage.selectfirstbutton
+        sleep 5
       end
     when 'AmexCars Booking' then
       if button == 'Search Cars'
