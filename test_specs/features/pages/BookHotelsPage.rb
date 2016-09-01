@@ -368,4 +368,7 @@ class BookHotelsPage < SitePrism::Page
     end
   end
 
+
+
+
 end

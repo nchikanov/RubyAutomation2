@@ -11,7 +11,7 @@ Feature: AmexTravel Hotel
     #And I set the "When are you going Return" field with "<date_return>" value
 
     #Could also send the date from example using this step
-    #Look into how to use custom dates with datepicker
+    #Look into how to use custom $("div").outerHeight()dates with datepicker
     And I select a date from the datepicker on the "check-in date" section
     And I select a date from the datepicker on the "check-out date" section
     And I set the "How many rooms and guests" fields with "<room>" value and "<adults>" and "<children>" value of ages "1" and "17"

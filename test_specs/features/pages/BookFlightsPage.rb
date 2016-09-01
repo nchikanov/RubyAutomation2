@@ -124,7 +124,7 @@ class BookFlightsPage < SitePrism::Page
     end
 
       puts 'Index of lowest price is: ' + tempIndex.to_s
-      puts 'There are ' + i.to_s + ' xpaths that I shuffled through'
+      puts 'There are ' + (i-1).to_s + ' xpaths that I shuffled through'
 
       low = find(:xpath, ".//*[@id='hia-hotel-cards']/li[#{tempIndex}]/div/div/span/span[@class='total-price price block _jq-price-with-tooltip _jq-rate-card-price']")::text()
       puts 'Lowest cost of hotel: ' + low.to_s

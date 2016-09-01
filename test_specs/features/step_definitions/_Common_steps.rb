@@ -1842,6 +1842,7 @@ And(/^I click on the "([^"]*)" button on "([^"]*)" page$/) do |button, page|
         find(:xpath, ".//*[@id='new_hotel_search']/fieldset/ol/li/input[@value='Search Hotels']").click
       elsif button == 'Book Hotel'
         @bookhotelspage.selectfirstbutton('Book Hotel')
+        sleep 5
       elsif button == 'Select best value hotel'
         @bookhotelspage.selectfirstbutton('Select best value hotel')
       elsif button == 'Review and Submit Hotel'
