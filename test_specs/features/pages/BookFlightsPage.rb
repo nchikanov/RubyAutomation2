@@ -65,22 +65,22 @@ class BookFlightsPage < SitePrism::Page
 
   @@addHotelToFlightContainer = ".product-results"
 
-  def scrollUntilElemFound(widget, xpath)
+  def scrollWidgetUntilElementFound(widget, xpathElement)
     idWidget = case widget
                  when 'Add Hotel to Flight' then
-                   @@addHotelToFlightContainer
+                   '.product-results'
                end
     outerHeight = page.execute_script("return $('#{idWidget}').outerHeight();")
     scrollHeight = page.execute_script("return $('#{idWidget}').get(0).scrollHeight;")
     scrollTop = page.execute_script("return $('#{idWidget}').scrollTop();")
 
     y = 400
-    contentFound = has_xpath?(xpath)
+    contentFound = has_xpath?(xpathElement)
     while ((scrollTop+outerHeight) < scrollHeight) and !contentFound do
       page.execute_script("$('#{idWidget}').scrollTop(#{y})")
       scrollTop = page.execute_script("return $('#{idWidget}').scrollTop();")
       within(idWidget) do
-        contentFound = has_xpath?(xpath)
+        contentFound = has_xpath?(xpathElement)
       end
       y += 400
     end
@@ -115,10 +115,10 @@ class BookFlightsPage < SitePrism::Page
 
       i = i + 1
 
-      hotel_path = ".//*[@id='hia-hotel-cards']/li[#{i}]/div/div/span/span[@class='total-price price block _jq-price-with-tooltip _jq-rate-card-price']"
-      if has_no_xpath? hotel_path
-        scrollUntilElemFound('Add Hotel to Flight', hotel_path)
-      end
+      #hotel_path = ".//*[@id='hia-hotel-cards']/li[#{i}]/div/div/span/span[@class='total-price price block _jq-price-with-tooltip _jq-rate-card-price']"
+      #if has_no_xpath? hotel_path
+       # scrollWidgetUntilElementFound('Add Hotel to Flight', hotel_path)
+      #end
 
 
     end
@@ -134,6 +134,7 @@ class BookFlightsPage < SitePrism::Page
 
 
   end
+
 
    def selectItemInAutosuggest(autosuggestName, item)
      case autosuggestName

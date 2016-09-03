@@ -1,4 +1,6 @@
-
+When(/^I set the radio button to "([^"]*)"$/) do |arg|
+  @util.selectRadioButton(arg)
+end
 
 Then(/^I verify that flight info from "([^"]*)" to "([^"]*)" to "([^"]*)" with "([^"]*)", "([^"]*)", and "([^"]*)" in "([^"]*)" is displayed$/) do |place1, place2, place3, seniors, adults, children, class_type|
   @util.verifyElementExists('Airport 1 From', place1)
@@ -11,10 +13,6 @@ Then(/^I verify that flight info from "([^"]*)" to "([^"]*)" to "([^"]*)" with "
 
   totalpassengers = seniors.to_i + adults.to_i + children.to_i
   @util.verifyElementExists('Multi Total Passengers', totalpassengers)
-end
-
-When(/^I set the radio button to "([^"]*)"$/) do |arg|
-  @util.selectRadioButton(arg)
 end
 
 And(/^I set the radio buttons to "([^"]*)" and "([^"]*)"$/) do |button1, button2|
@@ -68,17 +66,17 @@ And(/^I set the "([^"]*)" fields with "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)"
   element3 = "Where and when are you going_3"
 
   @bookflightspage.set2values(element1, place1, place2)
-  @mainpage.clickButton('departure date')
+  @util.clickButton('departure date')
   @util.selectDateFromDatePicker(datepicked.strftime('%m/%d/%Y'))
   @bookflightspage.setValue(element1, time1)
 
   @bookflightspage.set2values(element2, place2, place3)
-  @mainpage.clickButton('departure date 2')
+  @util.clickButton('departure date 2')
   @util.selectDateFromDatePicker((datepicked+30).strftime('%m/%d/%Y'))
   @bookflightspage.setValue(element2, time2)
 
   @bookflightspage.set2values(element3, place3, place1)
-  @mainpage.clickButton('departure date 3')
+  @util.clickButton('departure date 3')
   @util.selectDateFromDatePicker((datepicked+60).strftime('%m/%d/%Y'))
   @bookflightspage.setValue(element3, time3)
 end
@@ -89,7 +87,7 @@ And(/^I click on the lowest price option in flex matrix$/) do
 end
 
 And(/^I click on "([^"]*)" on the flight Matrix$/) do |airline|
-  @mainpage.clickButton(airline)
+  @util.clickButton(airline)
 end
 
 
@@ -179,8 +177,8 @@ Then(/^I print out total cost of "([^"]*)"$/) do |type|
       puts 'Total cost of car booking: ' + currency_symbol + total
     when 'Hotel Reservation' then
       sleep 2
-      total = find(:xpath,".//*[@class='App-mainContent']/form/fieldset/div/div/div/div/div/p/span/span[@class='FormattedCurrency-amount']/span")::text()
-      currency_symbol = find(:xpath, ".//*[@class='App-mainContent']/form/fieldset/div/div/div/div/div/p/span/span[@class='FormattedCurrency-symbol']")::text()
+      total = find(:xpath,".//*[@class='Policies-bookContainer']/div/p/span/span/span")::text()
+      currency_symbol = find(:xpath, ".//*[@class='Policies-bookContainer']/div/p/span/span[@class='FormattedCurrency-symbol']")::text()
       puts 'Total cost of hotel reservation: ' + currency_symbol + total
   end
 
@@ -318,12 +316,13 @@ And(/^I set the "([^"]*)" fields with "([^"]*)"$/) do |field, user|
       @bookhotelspage.fillValue('Name on card', @payments.getPaymentInfo(user, 'Name on card'))
 
       #scroll until element found
-      xpath_hotel = ".//*[@class='NewCardInformation-cardInfo']/div/div/div/div[@class='Select-inputContainer']"
-      @bookhotelspage.scrollUntilElemFound('Card Type Hotel Payment Info', xpath_hotel)
+      #xpath_hotel = ".//*[@class='NewCardInformation-cardInfo']/div/div/div/div[@class='Select-inputContainer']"
+      #@bookhotelspage.scrollUntilElemFound('Card Type Hotel Payment Info', xpath_hotel)
 
-      @bookhotelspage.fillValue('Card Type', @payments.getPaymentInfo(user, 'Card Type'))
 
       @bookhotelspage.fillValue('Card Number', @payments.getPaymentInfo(user, 'Card Number'))
+
+      @bookhotelspage.fillValue('Card Type', @payments.getPaymentInfo(user, 'Card Type'))
 
       @bookhotelspage.fillValue('Exp. Month', @payments.getPaymentInfo(user, 'Exp. Month'))
 

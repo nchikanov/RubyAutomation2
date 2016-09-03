@@ -8,17 +8,6 @@ require 'rspec/matchers'
 require 'site_prism'
 require 'site_prism/waiter'
 require 'gmail'
-#require 'forgery'
-#require_relative 'sauce_setup'
-
-=begin
-is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
-
-if is_windows
-  require 'win32/clipboard'
-  include Win32
-end
-=end
 
 # Browsers: IE, CH, FF, SA
 $browser = 'FF'
@@ -64,8 +53,7 @@ Before do |scenario|
   puts "TC Start time: #{Time.now.strftime('%m/%d/%Y %H:%M%p')}"
 
   #region defined screen pages
-  @mainpage = MainPage.new
-  @URL = URL.new
+  @url = URL.new
   @loginpage = LoginPage.new
   @users = Users.new
   @util = Util.new

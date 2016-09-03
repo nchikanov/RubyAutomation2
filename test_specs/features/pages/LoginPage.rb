@@ -8,12 +8,12 @@ class LoginPage < SitePrism::Page
   element :signin_button, :xpath, ".//*[@id='signIn' or @id='loginbutton' or @value='Sign in']"
 
   #Facebook Specific
-  element :new_email_field, :xpath, ".//*[@id='u_0_6']"
-  element :new_email_field_repeat, :xpath, ".//*[@id='u_0_9']"
-  element :new_password_field, :xpath, ".//*[@id='u_0_b']"
+  element :new_email_field, :xpath, ".//*[@id='u_0_5']"
+  element :new_email_field_repeat, :xpath, ".//*[@id='u_0_8']"
+  element :new_password_field, :xpath, ".//*[@id='u_0_a']"
   element :first_name, :xpath, ".//*[@id='u_0_1']"
   element :last_name, :xpath, ".//*[@id='u_0_3']"
-  element :sign_up, :xpath, ".//*[@id='u_0_j']"
+  element :sign_up, :xpath, ".//*[@id='u_0_i']"
 
   def fillValue(field, value)
     @users = Users.new

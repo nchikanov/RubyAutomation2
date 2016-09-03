@@ -224,11 +224,11 @@ class BookHotelsPage < SitePrism::Page
 
           ##2nd room##
           #num_adults_2room.click
-          find(:xpath, ".//*[@id='hotel_search_hotel_search_rooms_attributes_1_number_adults_input']/a").click
+          find(:xpath, ".//*[@id='hotel_search_hotel_search_rooms_attributes_1_number_adults_input']/a/span[@class='selectBox-arrow']").click
           find(:xpath, "html/body/ul[10]/li/a[text()='#{value2}']").click
 
           #num_kids_2room.click
-          find(:xpath, ".//*[@id='hotel_search_hotel_search_rooms_attributes_1_number_children_input']/a").click
+          find(:xpath, ".//*[@id='hotel_search_hotel_search_rooms_attributes_1_number_children_input']/a/span[@class='selectBox-arrow']").click
           find(:xpath, "html/body/ul[11]/li/a[text()='#{value3}']").click
 
           ##3rd room##
@@ -346,23 +346,23 @@ class BookHotelsPage < SitePrism::Page
   end
 
 
-  def scrollUntilElemFound(widget, xpath)
+  def scrollWidgetUntilElementFound(widget, xpathElement)
     idWidget = case widget
                  when 'Card Type Hotel Payment Info' then
-                   '.NewCardInformation-cardInfo'
+                   ".NewCardInformation-cardInfo"
                    #'.App-mainContent'
                end
-    outerHeight = page.execute_script("return $('#{idWidget}').outerHeight();")
-    scrollHeight = page.execute_script("return $('#{idWidget}').get(0).scrollHeight;")
-    scrollTop = page.execute_script("return $('#{idWidget}').scrollTop();")
+    outerHeight = page.execute_script("return $('#{idWidget}').outerHeight()")
+    scrollHeight = page.execute_script("return $('#{idWidget}').get(0).scrollHeight")
+    scrollTop = page.execute_script("return $('#{idWidget}').scrollTop()")
 
     y = 400
-    contentFound = has_xpath?(xpath)
+    contentFound = has_xpath?(xpathElement)
     while ((scrollTop+outerHeight) < scrollHeight) and !contentFound do
       page.execute_script("$('#{idWidget}').scrollTop(#{y})")
-      scrollTop = page.execute_script("return $('#{idWidget}').scrollTop();")
+      scrollTop = page.execute_script("return $('#{idWidget}').scrollTop()")
       within(idWidget) do
-        contentFound = has_xpath?(xpath)
+        contentFound = has_xpath?(xpathElement)
       end
       y += 400
     end

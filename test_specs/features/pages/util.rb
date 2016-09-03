@@ -1,5 +1,9 @@
 class Util < SitePrism::Page
 
+  @@currentSite
+  @@currentUser
+
+  #Datepicker
   element :datepickercurrentyear_label1, :xpath, ".//*[@id='ui-datepicker-div']/div[1]/div/div/span[@class='ui-datepicker-year']"
   element :datepickercurrentyear_label2, :xpath, ".//*[@id='ui-datepicker-div']/div[2]/div/div/span[@class='ui-datepicker-year']"
   element :datepickercurrentmonth_label1, :xpath, ".//*[@id='ui-datepicker-div']/div[1]/div/div/span[1]"
@@ -13,6 +17,9 @@ class Util < SitePrism::Page
   element :search_city_airport_radiobutton, :xpath, ".//*[@id='car_search_pickup_use_address_input']/fieldset/ol/li[1]/label/span"
   element :search_address_radiobutton, :xpath, ".//*[@id='car_search_pickup_use_address_input']/fieldset/ol/li[2]/label/span"
   element :final_agreement, :xpath, ".//*[@id='terms-conditions-section']/div/div/div/div/div/span[@class='ui-checkbox']"
+  element :pick_up_car, :xpath, ".//*[@id='car_search_start_date']"
+  element :drop_off_car, :xpath, ".//*[@id='car_search_end_date']"
+  element :select_cheap_car, :xpath, ".//*[@id='new_car_0']/fieldset/ol/button"
 
   #AmexTravel Flight Booking
   element :roundtrip_radiobutton, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[1]/label/span"
@@ -20,13 +27,127 @@ class Util < SitePrism::Page
   element :multicity_radiobutton, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[3]/label/span"
   element :travel_yes, :xpath, ".//*[@id='trip-insurance-body']/div/div[2]/span"
   element :travel_no, :xpath, ".//*[@id='trip-insurance-body']/div/div[3]/span"
+  element :round_trip, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[1]/label/span"
+  element :one_way, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[2]/label/span"
+  element :multi_city, :xpath, ".//*[@id='flight_search_trip_type_input']/fieldset/ol/li[3]/label/span"
+  element :dest_travel, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_0_departure_search_for']"
+  element :arriv_travel, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_0_arrival_search_for']"
+  element :dep_date, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_0_departure_date']"
+  element :dep_date_2, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_1_departure_date']"
+  element :dep_date_3, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_2_departure_date']"
+  element :dep_time, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_0_departure_hour_range_input']/a/span[1]"
+  element :ret_date, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_1_departure_date']"
+  element :ret_time, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_1_departure_hour_range_input']/a"
+  element :nonstop, :xpath, ".//*[@id='flight_search_nonstop_only_input']/label/span"
+  element :search_flights, :xpath, ".//*[@id='new_flight_search']/fieldset/ol/li/input[@value='Search Flights']"
+  element :when_go, :xpath, ".//*[@id='flight_search_flight_search_slices_attributes_0_departure_hour_range_input']/a/span[1]"
+  element :flexible_3days, :xpath, ".//*[@id='flight_search_flex_search_input']/label/span"
 
   #AmexTravel Hotel Booking
   element :city_landmark_search, :xpath, ".//*[@id='new_hotel_search']/fieldset[1]/ol/div/span[1]"
   element :address_search, :xpath, ".//*[@id='new_hotel_search']/fieldset/ol/div/span[2]"
   element :where_going_search_bar, :xpath, ".//*[@id='hotel_search_location_name']"
+  element :check_in, :xpath, ".//*[@id='hotel_search_start_date']"
+  element :check_out, :xpath, ".//*[@id='hotel_search_end_date']"
+  element :best_val_hotel, :xpath, ".//*[@id='list-view']/li[1]/div/div/a[contains(text(), 'Select')]"
+  element :review_submit_hotel, :xpath, ".//*[@class='PoliciesAgreementCheckbox']/div/label/div[@class='Checkbox-box']"
+
+  # NINA'S GOOGLE SEARCH v
+  element :search_bar, :xpath, "//*[@id='lst-ib' or @id='sb_form_q' or @id='search_form_input_homepage']"
+  element :nina_search, :xpath, "//*[@id='sblsbb' or @id='sb_form_go' or @id='search_button_homepage']"
 
 
+  def setCurrentSite(site)
+    @@currentSite = site
+  end
+
+  def setCurrentUser(user)
+    @@currentUser = user
+  end
+
+  def setPageUrl(url)
+    self.class.set_url url
+    page.driver.browser.manage.window.maximize
+    self.load
+  end
+
+  def fill_value(field, value)
+    case field
+      #Nina's Search Engine
+      when 'search' then
+        search_bar.set value
+
+      #AmexTravel Flight
+      when 'departure' then
+        dest_travel.set value.upcase
+      when 'arrival' then
+        arriv_travel.set value.upcase
+      when 'When are you going' then
+        when_go.set value
+
+      else
+        puts "'#{value}' value doesn't exist."
+    end
+  end
+
+
+  def clickButton(button)
+    case button
+      #Nina Search Engine
+      when 'search' then
+        nina_search.click
+
+      #AmexTravelFlight
+      when 'round trip' then
+        round_trip.click
+      when 'one way' then
+        one_way.click
+      when 'multi city' then
+        multi_city.click
+      when 'departure date' then
+        dep_date.click
+      when 'departure date 2' then
+        dep_date_2.click
+      when 'departure date 3' then
+        dep_date_3.click
+      when 'departure time' then
+        dep_time.click
+      when 'return date' then
+        ret_date.click
+      when 'return time' then
+        ret_time.click
+      when 'nonstop flight' then
+        nonstop.click
+      when 'search flights' then
+        search_flights.click
+      when 'Show me +/- 3 days' then
+        flexible_3days.click
+      when 'United Airlines' then
+        find(:xpath, ".//*[@id='selectable']/thead/tr/th/a/span[text()='#{button}']").click
+
+      #Hotel
+      when 'Review and Submit Hotel' then
+        review_submit_hotel.click
+      when 'check-in date' then
+        check_in.click
+      when 'check-out date' then
+        check_out.click
+      when 'Select best value hotel' then
+        sleep 1
+        best_val_hotel.click
+
+      #AmexTravel Car
+      when 'pick-up' then
+        pick_up_car.click
+      when 'drop-off' then
+        drop_off_car.click
+      when 'Select cheapest car' then
+        select_cheap_car.click
+
+      else
+        puts "'#{button}' button doesn't exist."
+    end
+  end
 
 
   def setValue(element, value)

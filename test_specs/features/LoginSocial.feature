@@ -10,5 +10,5 @@ Feature: Social Media Login
     Examples:
       | web        | user       | landing    |
       | gmail      | Nina       | Gmail Home |
-      #| facebook   | Nina-FB    | FB Home    |
+      | facebook   | Nina-FB    | FB Home    |
       | linkedin   | Nina       | LI Home    |
