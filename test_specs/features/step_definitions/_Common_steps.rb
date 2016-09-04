@@ -176,6 +176,10 @@ end
 
 Then(/^I verify the "([^"]*)" page is displayed$/) do |page|
   case page
+    when 'Checkout' then
+      displayed = has_xpath? ".//*[@class='tittle-summary']/h2[text()='Review Your Flight Booking']"
+      fail(ArgumentError.new('The Checkout page is not displayed!')) unless displayed
+
     when 'Review Your Trip' then
       displayed = has_xpath? ".//*[@class='tittle-summary']/h1[contains(text(),'Review Your Trip')]"
       fail(ArgumentError.new('The Review Your Trip page is not displayed!')) unless displayed

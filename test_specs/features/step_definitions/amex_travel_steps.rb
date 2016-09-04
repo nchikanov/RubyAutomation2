@@ -161,13 +161,26 @@ Then(/^I verify that flight info from "([^"]*)" to "([^"]*)" with "([^"]*)", "([
       @util.verifyElementExists('Endpoint Child In Seat', kids)
       @util.verifyElementExists('Endpoint Child In Lap', kids)
 
+    when 'Review Your Trip One Way' then
+      @util.verifyElementExists('Endpoint Departure', airport1)
+      @util.verifyElementExists('Endpoint Arrival', airport2)
+      @util.verifyElementExists('Endpoint Class Type', class_type)
+      @util.verifyElementExists('Endpoint Class Type', class_type)
+
+      kids = children.to_i / 2
+      @util.verifyElementExists('Endpoint Adults', adults)
+      @util.verifyElementExists('Endpoint Child In Seat', kids)
+      @util.verifyElementExists('Endpoint Child In Lap', kids)
+
+    else
+      fail(ArgumentError.new("Not all elements exist on '#{page}'!"))
   end
 
 end
 
 Then(/^I print out total cost of "([^"]*)"$/) do |type|
   case type
-    when 'Roundtrip Flight' then
+    when 'Roundtrip Flight', 'One Way Flight' then
       total = find(:xpath, ".//*[@class='total top']/span[@class='number _jq-total-price bentonSans']")::text()
       currency_symbol = find(:xpath, ".//*[@class='total top']/span[@class='super bentonBold']")::text()
       puts 'Total cost of roundtrip flight is: ' + currency_symbol + total
@@ -368,15 +381,20 @@ And(/^I set the "([^"]*)" fields with "([^"]*)"$/) do |field, user|
 
 
     when 'Travel Insurance' then
-      choice = user
-      if choice == 'Yes' #Choice, not user in this case
-        @util.selectRadioButton('Travel Insurance Yes')
-      elsif choice == 'No'
-        @util.selectRadioButton('Travel Insurance No')
+      if has_no_xpath?".//*[@id='trip-insurance']/h1/div[text()='Your state of residence does not allow you to add our travel insurance product to your purchase. However, you can continue with your purchase.']"
+        choice = user
+        if choice == 'Yes' #Choice, not user in this case
+          @util.selectRadioButton('Travel Insurance Yes')
+        elsif choice == 'No'
+          @util.selectRadioButton('Travel Insurance No')
+        end
+
+        #Save & Continue
+        find(:xpath, ".//*[@class='seats-buttons ui-helper-clearfix']/button[@id='trip_insurance_no_submit']").click
+      else
+        puts "Your state of residence does not allow you to add our travel insurance product to your purchase. However, you can continue with your purchase."
       end
 
-      #Save & Continue
-      find(:xpath, ".//*[@class='seats-buttons ui-helper-clearfix']/button[@id='trip_insurance_no_submit']").click
 
     when 'Payment Information Flight' then
       @bookflightspage.fillValue('Card Type', @payments.getPaymentInfo(user, 'Card Type'))
@@ -396,5 +414,18 @@ And(/^I set the "([^"]*)" fields with "([^"]*)"$/) do |field, user|
       #Save & Continue
     find(:xpath, ".//*[@id='paymodule']/div/div/button").click
 
+  end
+end
+
+And(/^I select preferred seats for my flight$/) do
+  if has_xpath?".//*[@class='select-seats'][text()='Select Seats']"
+    find(:xpath, ".//*[@class='select-seats'][text()='Select Seats']").click
+    @bookflightspage.select2seats
+
+  elsif has_xpath?".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Continue Booking']"
+    find(:xpath, ".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Continue Booking']").click
+
+  elsif has_xpath?".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Skip Seat Selection']"
+    find(:xpath, ".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Skip Seat Selection']").click
   end
 end

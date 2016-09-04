@@ -1,4 +1,3 @@
-
 class BookFlightsPage < SitePrism::Page
 
   @@hotelHash =  Hash.new { |h,k| h[k] = {} }
@@ -404,6 +403,45 @@ class BookFlightsPage < SitePrism::Page
 
 
     end
+  end
+
+  def select2seats
+    if has_css? ".seat.available"
+
+      page.all(:css, '.seat.available').each do |seat|
+        currentSeat = seat[:id]
+
+        curIDnum = currentSeat.gsub(/[^0-9]/, "")
+        curIDletter = currentSeat.gsub(/[^A-K]/, "")
+
+        secondSeatIDletterR = (curIDletter.ord + 1).chr
+        secondSeatIDletterL = (curIDletter.ord - 1).chr
+
+        secondSeatRight = curIDnum + secondSeatIDletterR
+        secondSeatLeft = curIDnum + secondSeatIDletterL
+
+        if has_xpath?".//*[@class='seats-row']/li[@id='#{secondSeatLeft}'][contains(@class,'available')]"
+          seat.click
+          sleep 1
+          find(:xpath, ".//*[@class='seats-row']/li[@id='#{secondSeatLeft}'][contains(@class,'available')]").click
+          break
+
+        elsif has_xpath?".//*[@class='seats-row']/li[@id='#{secondSeatRight}'][contains(@class,'available')]"
+          seat.click
+          sleep 1
+          find(:xpath, ".//*[@class='seats-row']/li[@id='#{secondSeatRight}'][contains(@class,'available')]").click
+          break
+
+        end
+
+      end
+
+    else
+      puts "Not enough seats available on this flight"
+
+    end
+
+
   end
 
 

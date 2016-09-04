@@ -285,9 +285,9 @@ class Util < SitePrism::Page
 
         #Review Your Trip Flights
       when 'Endpoint Departure' then
-        fail(ArgumentError.new('Departure airport "from" does not match original search on Review Trip page')) if has_no_xpath?(".//*[@class='slice']/div/div/div/div/div/span[contains(@title, '#{input}')]")
+        fail(ArgumentError.new('Departure airport "from" does not match original search on Review Trip page')) if has_no_xpath?(".//*[@class='slice']/div/div/div/div/div/span[contains(text(), '#{input}')]")
       when 'Endpoint Arrival' then
-        fail(ArgumentError.new('Arrival airport "from" does not match original search on Review Trip page')) if has_no_xpath?(".//*[@class='slice']/div/div/div/div/div/span[contains(@title, '#{input}')]")
+        fail(ArgumentError.new('Arrival airport "from" does not match original search on Review Trip page')) if has_no_xpath?(".//*[@class='slice']/div/div/div/div/div/span[contains(text(), '#{input}')]")
       when 'Endpoint Departure 2' then
         fail(ArgumentError.new('Departure airport "to" does not match original search on Review Trip page')) if has_no_xpath?(".//*[@class='slice']/div/div/div/div/div[@class='endpoint arrival']/span[contains(text(), '#{input}')]")
       when 'Endpoint Arrival 2' then
@@ -295,7 +295,7 @@ class Util < SitePrism::Page
       when 'Endpoint Adults' then
         fail(ArgumentError.new('Total adults do not match OG search on Review Trip page')) if has_no_xpath?(".//*[@class='summary']/div/div/div/div[@class='travel'][contains(text(),'#{input} Adult')]")
       when 'Endpoint Class Type' then
-        fail(ArgumentError.new('Class type doesnt match OG search on Review Trip page')) if has_no_xpath?(".//*[@class='flight-solution _jq-flight _jq-card card-full-width']/div[4]/div/div/ul/li[@class='cabin-type-list'][contains(text(), '#{input}')]")
+        fail(ArgumentError.new('Class type doesnt match OG search on Review Trip page')) if has_no_xpath?(".//*[@class='slice']/div/div/ul/li[@class='cabin-type-list'][contains(text(),'#{input}')]")
       when 'Endpoint Child In Seat' then
         fail(ArgumentError.new('No. of children in seat doesnt match OG search on Review Trip page')) if has_no_xpath?(".//*[@class='summary']/div/div/div/div[@class='travel'][contains(text(),'#{input} Infant Seated')]")
       when 'Endpoint Child In Lap' then

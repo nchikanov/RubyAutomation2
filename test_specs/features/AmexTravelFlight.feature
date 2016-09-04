@@ -69,8 +69,8 @@ Feature: AmexTravel Flight Booking
       # http://www.tutorialspoint.com/ruby/ruby_hashes.htm
 
     Examples:
-      | type of flight | starting point | airport | ending point | airport2 | time     | time2    | seniors | adults | children | class type       | codeAirline     | user1 | user2 | user3 | travel insurance |
-      | Round Trip     | SFO            | SFO     | MSP          | MSP      | Anytime  | Anytime  | 0       | 1      | 2        | Economy          | United Airlines | Nina  | Mario | Peach | No               |
+      | type of flight | starting point | airport | ending point | airport2 | time     | time2    | seniors | adults | children | class type       | codeAirline     |
+      | Round Trip     | SFO            | SFO     | MSP          | MSP      | Anytime  | Anytime  | 0       | 1      | 2        | Economy          | United Airlines |
 
 
   Scenario Outline: Book a nonstop, one way flight for 1 adult, 2 children
@@ -84,11 +84,22 @@ Feature: AmexTravel Flight Booking
     And I click on the "nonstop flight" button
     And I select "<class type>" option from the "fare class" dropdown menu
     And I click on the "search flights" button
-    #Then I verify that flight info from "<airport>" to "<airport2>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed
+   # Then I verify that flight info from "<airport>" to "<airport2>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed on "Flex" page
+    And I click on "<codeAirline>" on the flight Matrix
+    And I click on the "Select on the first Airline flight card" button on "Flex" page
+    #Then I verify the "Checkout" page is displayed
+    And I print out total cost of "One Way Flight"
+    #Then I verify that flight info from "<airport>" to "<airport2>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed on "Review Your Trip One Way" page
+    And I set the "Traveler 1 - Adult" fields with "<user1>"
+    And I set the "Traveler 2 - Infant Seated" fields with "<user2>"
+    And I set the "Traveler 3 - Infant On Lap" fields with "<user3>"
+    And I click on the "Traveler Save & Continue" button on "AmexFlight Booking" page
+    And I set the "Travel Insurance" fields with "<travel insurance>"
+    And I select preferred seats for my flight
 
     Examples:
-     | type of flight | starting point | airport | ending point | airport2 | time     | seniors | adults | children | class type       |
-     | One Way        | SFO            | SFO     | LAX          | LAX      | 4pm-8pm  | 0       | 1      | 2        | Economy          |
+     | type of flight | starting point | airport | ending point | airport2 | time     | seniors | adults | children | class type       | codeAirline      | user1 | user2 | user3 | travel insurance |
+     | One Way        | ORD            | ORD     | SFO          | SFO      | Anytime  | 0       | 1      | 2        | Economy          | United Airlines  | Nina  | Mario | Peach | No               |
 
     Scenario Outline: Book a nonstop, 3-city flight itinerary for 1 adult and 1 senior
       Given I navigate to the external "flights" site
