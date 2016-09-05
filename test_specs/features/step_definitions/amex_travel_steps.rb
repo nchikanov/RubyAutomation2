@@ -59,7 +59,7 @@ And(/^I set the "([^"]*)" field with "([^"]*)" value$/) do |element, value|
 end
 
 And(/^I set the "([^"]*)" fields with "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)" and "(.*) values$/) do |element, place1, place2, place3, time1, time2, time3|
-  datepicked = Date.today+7
+  datepicked = Date.today+90
 
   element1 = "Where and when are you going"
   element2 = "Where and when are you going_2"
@@ -72,12 +72,12 @@ And(/^I set the "([^"]*)" fields with "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)"
 
   @bookflightspage.set2values(element2, place2, place3)
   @util.clickButton('departure date 2')
-  @util.selectDateFromDatePicker((datepicked+30).strftime('%m/%d/%Y'))
+  @util.selectDateFromDatePicker((datepicked+95).strftime('%m/%d/%Y'))
   @bookflightspage.setValue(element2, time2)
 
   @bookflightspage.set2values(element3, place3, place1)
   @util.clickButton('departure date 3')
-  @util.selectDateFromDatePicker((datepicked+60).strftime('%m/%d/%Y'))
+  @util.selectDateFromDatePicker((datepicked+100).strftime('%m/%d/%Y'))
   @bookflightspage.setValue(element3, time3)
 end
 
@@ -180,19 +180,22 @@ end
 
 Then(/^I print out total cost of "([^"]*)"$/) do |type|
   case type
-    when 'Roundtrip Flight', 'One Way Flight' then
+    when 'Roundtrip Flight', 'One Way Flight', 'Multi City Flight' then
       total = find(:xpath, ".//*[@class='total top']/span[@class='number _jq-total-price bentonSans']")::text()
       currency_symbol = find(:xpath, ".//*[@class='total top']/span[@class='super bentonBold']")::text()
       puts 'Total cost of roundtrip flight is: ' + currency_symbol + total
+
     when 'Car Booking' then
       total = find(:xpath, ".//*[@class='travel-benefits']/div/div/span[@class='number bentonSans _jq-total-price']")::text()
       currency_symbol = find(:xpath, ".//*[@class='travel-benefits']/div/div/span[@class='super bentonBold _jq-total-price-symbol']")::text()
       puts 'Total cost of car booking: ' + currency_symbol + total
+
     when 'Hotel Reservation' then
       sleep 2
       total = find(:xpath,".//*[@class='Policies-bookContainer']/div/p/span/span/span")::text()
       currency_symbol = find(:xpath, ".//*[@class='Policies-bookContainer']/div/p/span/span[@class='FormattedCurrency-symbol']")::text()
       puts 'Total cost of hotel reservation: ' + currency_symbol + total
+
   end
 
   #How to extract text from xpath and print to console#
@@ -329,9 +332,8 @@ And(/^I set the "([^"]*)" fields with "([^"]*)"$/) do |field, user|
       @bookhotelspage.fillValue('Name on card', @payments.getPaymentInfo(user, 'Name on card'))
 
       #scroll until element found
-      #xpath_hotel = ".//*[@class='NewCardInformation-cardInfo']/div/div/div/div[@class='Select-inputContainer']"
-      #@bookhotelspage.scrollUntilElemFound('Card Type Hotel Payment Info', xpath_hotel)
-
+      xpath_hotel = ".//*[@class='NewCardInformation-cardInfo']/div/div/div/div[@class='Select-inputContainer']"
+      @bookhotelspage.scrollWidgetUntilElementFound('Card Type Hotel Payment Info', xpath_hotel)
 
       @bookhotelspage.fillValue('Card Number', @payments.getPaymentInfo(user, 'Card Number'))
 
@@ -417,15 +419,85 @@ And(/^I set the "([^"]*)" fields with "([^"]*)"$/) do |field, user|
   end
 end
 
-And(/^I select preferred seats for my flight$/) do
-  if has_xpath?".//*[@class='select-seats'][text()='Select Seats']"
-    find(:xpath, ".//*[@class='select-seats'][text()='Select Seats']").click
-    @bookflightspage.select2seats
+Then(/^I verify that flight info from "([^"]*)" to "([^"]*)" to "([^"]*)" with "([^"]*)", "([^"]*)", and "([^"]*)" in "([^"]*)" is displayed on "([^"]*)" page$/) do |city1, city2, city3, seniors, adults, children, class_type, page_input|
+  case page_input
+    when 'Review Your Trip Multi City' then
+      #Verify all 3 lefthand side cities
+    @util.verifyElementExists('Endpoint Departure', city1)
+    @util.verifyElementExists('Endpoint Departure', city2)
+    @util.verifyElementExists('Endpoint Departure', city3)
 
-  elsif has_xpath?".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Continue Booking']"
-    find(:xpath, ".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Continue Booking']").click
+    #Verify all 3 righthand side cities
+    @util.verifyElementExists('Endpoint Arrival', city1)
+    @util.verifyElementExists('Endpoint Arrival', city2)
+    @util.verifyElementExists('Endpoint Arrival', city3)
 
-  elsif has_xpath?".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Skip Seat Selection']"
-    find(:xpath, ".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Skip Seat Selection']").click
+
+    #Verify Class Type
+    array = Array.new
+    page.all(:xpath, ".//*[@class='slice']/div/div/ul/li[@class='cabin-type-list'][contains(text(),'#{class_type}')]").each do |classtype|
+      array.push(classtype)
+    end
+    fail(ArgumentError.new('Class Type is not the same as original on Review Your Flight Booking Page')) if array.size < 1
+    #@util.verifyElementExists('Endpoint Class Type', class_type)
+
+    #Verify 1 adult 1 infant seated 1 infant in lap
+    kids = children.to_i / 2
+    @util.verifyElementExists('Endpoint Adults', adults)
+    @util.verifyElementExists('Endpoint Child In Seat', kids)
+    @util.verifyElementExists('Endpoint Child In Lap', kids)
   end
+end
+
+And(/^I select preferred seats for my "([^"]*)" flight$/) do |type|
+  case type
+    when 'One Way' then
+      if has_xpath?".//*[@class='select-seats'][text()='Select Seats']"
+        find(:xpath, ".//*[@class='select-seats'][text()='Select Seats']").click
+        @bookflightspage.select2seats('Flight1')
+
+        #Save & Continue
+        find(:xpath, ".//*[@class='nav-buttons']/div/div/a[text()='Save & Continue']").click
+
+      elsif has_xpath?".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Continue Booking']"
+        find(:xpath, ".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Continue Booking']").click
+
+      elsif has_xpath?".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Skip Seat Selection']"
+        find(:xpath, ".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Skip Seat Selection']").click
+      end
+
+  end
+
+
+end
+
+And(/^I select preferred seats for my "([^"]*)" flight from "([^"]*)" to "([^"]*)" to "([^"]*)"$/) do |type_flight, place1, place2, place3|
+  case type_flight
+    when 'Multi City' then
+      if has_xpath?".//*[@class='select-seats'][text()='Select Seats']"
+        find(:xpath, ".//*[@class='select-seats'][text()='Select Seats']").click
+        @bookflightspage.select2seats
+
+        #Next for Flight1
+        find(:xpath, ".//*[@class='seat-selection-details']/div[contains(@id, '#{place1}')]/div/div/div/a").click
+
+        @bookflightspage.select2seats
+
+        #Next for Flight2
+        find(:xpath, ".//*[@class='seat-selection-details']/div[contains(@id, '#{place2}')]/div/div/div/a[text()='Next Flight']").click
+
+        @bookflightspage.select2seats
+
+        #Save & Continue
+        find(:xpath, ".//*[@class='nav-buttons']/div/div/a[text()='Save & Continue']").click
+
+      elsif has_xpath?".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Continue Booking']"
+        find(:xpath, ".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Continue Booking']").click
+
+      elsif has_xpath?".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Skip Seat Selection']"
+        find(:xpath, ".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Skip Seat Selection']").click
+      end
+  end
+
+
 end

@@ -84,37 +84,52 @@ Feature: AmexTravel Flight Booking
     And I click on the "nonstop flight" button
     And I select "<class type>" option from the "fare class" dropdown menu
     And I click on the "search flights" button
-   # Then I verify that flight info from "<airport>" to "<airport2>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed on "Flex" page
+    Then I verify that flight info from "<airport>" to "<airport2>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed on "Flex" page
     And I click on "<codeAirline>" on the flight Matrix
     And I click on the "Select on the first Airline flight card" button on "Flex" page
-    #Then I verify the "Checkout" page is displayed
+    Then I verify the "Checkout" page is displayed
     And I print out total cost of "One Way Flight"
-    #Then I verify that flight info from "<airport>" to "<airport2>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed on "Review Your Trip One Way" page
+    Then I verify that flight info from "<airport>" to "<airport2>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed on "Review Your Trip One Way" page
     And I set the "Traveler 1 - Adult" fields with "<user1>"
     And I set the "Traveler 2 - Infant Seated" fields with "<user2>"
     And I set the "Traveler 3 - Infant On Lap" fields with "<user3>"
     And I click on the "Traveler Save & Continue" button on "AmexFlight Booking" page
     And I set the "Travel Insurance" fields with "<travel insurance>"
-    And I select preferred seats for my flight
+    And I select preferred seats for my "One Way" flight
+    And I set the "Payment Information Flight" fields with "<user1>"
+    And I click on the "I have read and agree to the policies, rules, and restrictions" button on "AmexFlight Booking" page
+
 
     Examples:
      | type of flight | starting point | airport | ending point | airport2 | time     | seniors | adults | children | class type       | codeAirline      | user1 | user2 | user3 | travel insurance |
      | One Way        | ORD            | ORD     | SFO          | SFO      | Anytime  | 0       | 1      | 2        | Economy          | United Airlines  | Nina  | Mario | Peach | No               |
 
-    Scenario Outline: Book a nonstop, 3-city flight itinerary for 1 adult and 1 senior
+    Scenario Outline: Book a nonstop, 3-city flight itinerary for 1 adult and 2 kids
       Given I navigate to the external "flights" site
       When I set the radio button to "<type of flight>"
       And I set the "Where and when are you going" fields with "<place 1>", "<place 2>", "<place 3>", "<time>", "<time2>" and "<time3> values
       And I click on the "number of travelers" button with "<seniors>", "<adults>", and "<children>"
-      #And I set the "Children Age" fields with "child in lap" value and "child in seat" value
+      And I set the "Children Age" fields with "child in lap" value and "child in seat" value
       And I click on the "nonstop flight" button
       And I select "<class type>" option from the "fare class" dropdown menu
       And I click on the "search flights" button
       Then I verify that flight info from "<place 1>" to "<place 2>" to "<place 3>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed
+      And I click on "<codeAirline>" on the flight Matrix
+      And I click on the "Select on the first Airline flight card" button on "Flex" page
+      Then I verify the "Checkout" page is displayed
+      And I print out total cost of "Multi City Flight"
+      Then I verify that flight info from "<place 1>" to "<place 2>" to "<place 3>" with "<seniors>", "<adults>", and "<children>" in "<class type>" is displayed on "Review Your Trip Multi City" page
+      And I set the "Traveler 1 - Adult" fields with "<user1>"
+      And I set the "Traveler 2 - Infant Seated" fields with "<user2>"
+      And I set the "Traveler 3 - Infant On Lap" fields with "<user3>"
+      And I click on the "Traveler Save & Continue" button on "AmexFlight Booking" page
+      And I set the "Travel Insurance" fields with "<travel insurance>"
+      And I select preferred seats for my "Multi City" flight from "<place 1>" to "<place 2>" to "<place 3>"
+      And I set the "Payment Information Flight" fields with "<user1>"
+      And I click on the "I have read and agree to the policies, rules, and restrictions" button on "AmexFlight Booking" page
 
     Examples:
-     | type of flight | place 1 | place 2 | place 3 | time    | time2   | time3   | seniors | adults | children | class type |
-     | Multi-City     | SFO     | STL     | LAX     | Anytime | Anytime | Anytime | 1       | 1      | 0        | Economy    |
+     | type of flight | place 1 | place 2 | place 3 | time    | time2   | time3   | seniors | adults | children | class type | user1 | user2 | user3 | travel insurance |
+     | Multi-City     | ORD     | SFO     | MSP     | Anytime | Anytime | Anytime | 0       | 1      | 2        | Economy    | Nina  | Mario | Peach | No               |
 
-      #Complete these test cases with steps I'm missing
-      #Execute with a cucumber comment in the terminal and create an HTML report
+

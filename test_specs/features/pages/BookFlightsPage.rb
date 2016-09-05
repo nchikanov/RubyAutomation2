@@ -406,41 +406,40 @@ class BookFlightsPage < SitePrism::Page
   end
 
   def select2seats
-    if has_css? ".seat.available"
 
-      page.all(:css, '.seat.available').each do |seat|
-        currentSeat = seat[:id]
+        if has_css? ".seat.available"
 
-        curIDnum = currentSeat.gsub(/[^0-9]/, "")
-        curIDletter = currentSeat.gsub(/[^A-K]/, "")
+          page.all(:css, '.seat.available').each do |seat|
+            currentSeat = seat[:id]
 
-        secondSeatIDletterR = (curIDletter.ord + 1).chr
-        secondSeatIDletterL = (curIDletter.ord - 1).chr
+            curIDnum = currentSeat.gsub(/[^0-9]/, "")
+            curIDletter = currentSeat.gsub(/[^A-K]/, "")
 
-        secondSeatRight = curIDnum + secondSeatIDletterR
-        secondSeatLeft = curIDnum + secondSeatIDletterL
+            secondSeatIDletterR = (curIDletter.ord + 1).chr
+            secondSeatIDletterL = (curIDletter.ord - 1).chr
 
-        if has_xpath?".//*[@class='seats-row']/li[@id='#{secondSeatLeft}'][contains(@class,'available')]"
-          seat.click
-          sleep 1
-          find(:xpath, ".//*[@class='seats-row']/li[@id='#{secondSeatLeft}'][contains(@class,'available')]").click
-          break
+            secondSeatRight = curIDnum + secondSeatIDletterR
+            secondSeatLeft = curIDnum + secondSeatIDletterL
 
-        elsif has_xpath?".//*[@class='seats-row']/li[@id='#{secondSeatRight}'][contains(@class,'available')]"
-          seat.click
-          sleep 1
-          find(:xpath, ".//*[@class='seats-row']/li[@id='#{secondSeatRight}'][contains(@class,'available')]").click
-          break
+            if has_xpath?".//*[@class='seats-row']/li[@id='#{secondSeatLeft}'][contains(@class,'available')]"
+              seat.click
+              sleep 1
+              find(:xpath, ".//*[@class='seats-row']/li[@id='#{secondSeatLeft}'][contains(@class,'available')]").click
+              break
+
+            elsif has_xpath?".//*[@class='seats-row']/li[@id='#{secondSeatRight}'][contains(@class,'available')]"
+              seat.click
+              sleep 1
+              find(:xpath, ".//*[@class='seats-row']/li[@id='#{secondSeatRight}'][contains(@class,'available')]").click
+              break
+
+            end
+          end
+
+        else
+          puts "Not enough seats available on this flight"
 
         end
-
-      end
-
-    else
-      puts "Not enough seats available on this flight"
-
-    end
-
 
   end
 

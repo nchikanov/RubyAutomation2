@@ -349,7 +349,7 @@ class BookHotelsPage < SitePrism::Page
   def scrollWidgetUntilElementFound(widget, xpathElement)
     idWidget = case widget
                  when 'Card Type Hotel Payment Info' then
-                   ".NewCardInformation-cardInfo"
+                   '.NewCardInformation-cardInfo'
                    #'.App-mainContent'
                end
     outerHeight = page.execute_script("return $('#{idWidget}').outerHeight()")

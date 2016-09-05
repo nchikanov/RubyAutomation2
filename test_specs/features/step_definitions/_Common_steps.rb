@@ -59,7 +59,7 @@ And(/^I click on the "([^"]*)" button on "([^"]*)" page$/) do |button, page|
       elsif button == 'Continue Booking'
         find(:xpath, ".//*[@id='seats-selection-info']/div/div[1]/div/div/a[text()='Continue Booking']").click
       elsif button == 'I have read and agree to the policies, rules, and restrictions'
-        find(:xpath, ".//*[@id='booking-info']/div/div/div/div/span[@class='ui-checkbox']").click
+        find(:xpath, ".//*[@id='booking-info']/div/div/div/div/div/span[@class='ui-checkbox']").click
 
       end
 
