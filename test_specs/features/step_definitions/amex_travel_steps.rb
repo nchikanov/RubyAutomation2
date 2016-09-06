@@ -332,8 +332,8 @@ And(/^I set the "([^"]*)" fields with "([^"]*)"$/) do |field, user|
       @bookhotelspage.fillValue('Name on card', @payments.getPaymentInfo(user, 'Name on card'))
 
       #scroll until element found
-      xpath_hotel = ".//*[@class='NewCardInformation-cardInfo']/div/div/div/div[@class='Select-inputContainer']"
-      @bookhotelspage.scrollWidgetUntilElementFound('Card Type Hotel Payment Info', xpath_hotel)
+      #xpath_hotel = ".//*[@class='NewCardInformation-cardInfo']/div/div/div/div[@class='Select-inputContainer']"
+      #@bookhotelspage.scrollWidgetUntilElementFound('Card Type Hotel Payment Info', xpath_hotel)
 
       @bookhotelspage.fillValue('Card Number', @payments.getPaymentInfo(user, 'Card Number'))
 
