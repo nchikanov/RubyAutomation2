@@ -454,7 +454,7 @@ And(/^I select preferred seats for my "([^"]*)" flight$/) do |type|
     when 'One Way' then
       if has_xpath?".//*[@class='select-seats'][text()='Select Seats']"
         find(:xpath, ".//*[@class='select-seats'][text()='Select Seats']").click
-        @bookflightspage.select2seats('Flight1')
+        @bookflightspage.select2seats
 
         #Save & Continue
         find(:xpath, ".//*[@class='nav-buttons']/div/div/a[text()='Save & Continue']").click

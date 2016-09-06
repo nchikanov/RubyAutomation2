@@ -10,3 +10,5 @@ Feature: Facebook Sign Up
     | facebook  | Mario      | Mar   | 10  | 1984 | M      | gmail          | Mario       | Mario |
     #| facebook  | Luigi      | Sep   | 4   | 1990 | F      | gmail          | Luigi       | Luigi |
     #| facebook  | Wario      | Jul   | 26  | 1997 | M      | gmail          | Wario       | Wario |
+
+  #Note: All examples above already have a FB account made, must add a new user to users.rb to test fully
